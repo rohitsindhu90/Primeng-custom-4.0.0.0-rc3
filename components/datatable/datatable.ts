@@ -2214,7 +2214,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                 let isNumber:boolean;
                 for (let i = 1; i < data_array.length; i++) {
                     let value = data_array[i][j];
-                    if (Number(value)) {
+                    if (!isNaN(Number(value))) {
                         if(!isNumber){
                           isNumber=true;
                         }
