@@ -2,13 +2,13 @@
     "data": [
         {"brand": "0", "year": "00:00:00", "color": "Orange", "vin": "dsad231ff"},
         {"brand": "0", "year": "00:00:00", "color": "Black", "vin": "gwregre345"},
-        {"brand": "0", "year": "00:00:00", "color": "Gray", "vin": "h354htr"},
-        {"brand": "0", "year": "00:00:00", "color": "Blue", "vin": "j6w54qgh"},
-        {"brand": "0", "year": "00:00:00", "color": "Orange", "vin": "hrtwy34"},
-        {"brand": "0", "year": "00:00:00", "color": "Black", "vin": "jejtyj"},
-        {"brand": "0", "year":"00:00:00" , "color": "Yellow", "vin": "g43gr"},
-        {"brand": "0", "year": "00:00:00", "color": "Orange", "vin": "greg34"},
-        {"brand": "0", "year": "00:00:00", "color": "Black", "vin": "h54hw5"},
-        {"brand": "0", "year": "00:00:00", "color": "Red", "vin": "245t2s"}
+        {"brand": "1.45", "year": "00:00:00", "color": "Gray", "vin": "h354htr"},
+        {"brand": "45.45", "year": "00:00:00", "color": "Blue", "vin": "j6w54qgh"},
+        {"brand": "0:45", "year": "00:00:00", "color": "Orange", "vin": "hrtwy34"},
+        {"brand": "0:10", "year": "00:00:00", "color": "Black", "vin": "jejtyj"},
+        {"brand": "0.10", "year":"00:00:00" , "color": "Yellow", "vin": "g43gr"},
+        {"brand": "0.12", "year": "00:00:00", "color": "Orange", "vin": "greg34"},
+        {"brand": "0.12", "year": "00:00:00", "color": "Black", "vin": "h54hw5"},
+        {"brand": "0.12", "year": "00:00:00", "color": "Red", "vin": "245t2s"}
     ]
 }

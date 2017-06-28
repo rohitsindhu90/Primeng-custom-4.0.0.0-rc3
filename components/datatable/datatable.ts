@@ -2218,12 +2218,13 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                         if (!isNumber) {
                             isNumber = true;
                         }
+
+                        if (!columnsum) {
+                            columnsum = 0;
+                        }
                         columnsum = columnsum + parseFloat(value);
                     }
                     else if (this.durationvalue(value)) {
-                        if (isNumber!=false) {
-                            isNumber = false;
-                        }
                         var duration: any = value.split(":");
                         hours = hours + parseInt(duration[0]);
                         minutes = minutes + parseInt(duration[1]);
@@ -2249,13 +2250,12 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                 if (isNumber) {
                     res_columnsum.push(columnsum);
                 }
-                else if (!isNumber) {
+                else if (hours || minutes || seconds) {
                     res_columnsum.push(hours + ":" + minutes + ":" + seconds);
                 }
-                else{
-                  res_columnsum.push("");
+                else {
+                    res_columnsum.push(0);
                 }
-
 
             }
             else {
