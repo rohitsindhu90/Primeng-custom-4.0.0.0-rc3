@@ -2210,22 +2210,20 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                 let minutes: number = 0;
                 let seconds: number = 0;
                 // console.log('sum column');
-                let columnsum: number=0;
-                let isNumber:boolean;
+                let columnsum: number = 0;
+                let isNumber: boolean;
                 for (let i = 1; i < data_array.length; i++) {
                     let value = data_array[i][j];
                     if (!isNaN(Number(value))) {
-                        if(!isNumber){
-                          isNumber=true;
-                        }
-
-                        if(!columnsum)
-                        {
-                          columnsum=0;
+                        if (!isNumber) {
+                            isNumber = true;
                         }
                         columnsum = columnsum + parseFloat(value);
                     }
                     else if (this.durationvalue(value)) {
+                        if (isNumber!=false) {
+                            isNumber = false;
+                        }
                         var duration: any = value.split(":");
                         hours = hours + parseInt(duration[0]);
                         minutes = minutes + parseInt(duration[1]);
@@ -2251,8 +2249,11 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                 if (isNumber) {
                     res_columnsum.push(columnsum);
                 }
-                else if (hours || minutes || seconds) {
+                else if (!isNumber) {
                     res_columnsum.push(hours + ":" + minutes + ":" + seconds);
+                }
+                else{
+                  res_columnsum.push("");
                 }
 
 
@@ -2262,7 +2263,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
             }
             if (j == (exportColumns.length - 1) && this.displaysum) {
 
-                let indexOfFirstFilledcolumn = res_columnsum.findIndex(c => c)
+                let indexOfFirstFilledcolumn = res_columnsum.findIndex(c => c || c === 0);
                 if (indexOfFirstFilledcolumn > 0 && res_columnsum[indexOfFirstFilledcolumn - 1].length == 0) {
                     res_columnsum[indexOfFirstFilledcolumn - 1] = 'Total';
                 }
