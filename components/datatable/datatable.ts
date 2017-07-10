@@ -2434,7 +2434,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                     };
 
                 }
-                else if ((this.displaysum && (R != data.length - 1))) {
+                else {
                     cell.s = {
                         border:
                         {
@@ -2455,8 +2455,8 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                         }
                     };
                 }
-
-                if (cell.v == null) continue;
+                //convert null value to empty string
+                if (cell.v == null) cell.v="";
                 var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
                 if (typeof cell.v === 'number')
                     cell.t = 'n';

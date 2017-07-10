@@ -10,9 +10,9 @@ import {FilterMetadata} from '../../../components/common/api';
 export class DataTableLazyDemo implements OnInit {
 
     datasource: Car[];
-    
+
     cars: Car[];
-    
+
     totalRecords: number;
 
     constructor(private carService: CarService) { }
@@ -20,12 +20,12 @@ export class DataTableLazyDemo implements OnInit {
     ngOnInit() {
         //datasource imitation
         this.carService.getCarsLarge().then(cars => {
-            this.datasource = cars; 
+            this.datasource = cars;
             this.totalRecords = this.datasource.length;
             this.cars = this.datasource.slice(0, 10);
         });
     }
-    
+
     loadCarsLazy(event: LazyLoadEvent) {
         //in a real application, make a remote request to load data using state metadata from event
         //event.first = First row offset
@@ -33,8 +33,10 @@ export class DataTableLazyDemo implements OnInit {
         //event.sortField = Field name to sort with
         //event.sortOrder = Sort order as number, 1 for asc and -1 for dec
         //filters: FilterMetadata object having field as key and filter value, filter matchMode as value
-        
+
         //imitate db connection over a network
+        debugger;
+        console.log(event);
         setTimeout(() => {
             if(this.datasource) {
                 this.cars = this.datasource.slice(event.first, (event.first + event.rows));
