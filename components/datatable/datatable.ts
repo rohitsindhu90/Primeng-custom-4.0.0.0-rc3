@@ -923,6 +923,9 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
     resolveFieldData(data: any, field: string): any {
         if (data && field) {
             if (field.indexOf('.') == -1) {
+                if (data[field] == null) {
+                    return ' ';
+                }
                 return data[field];
             }
             else {
@@ -930,7 +933,8 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                 let value = data;
                 for (var i = 0, len = fields.length; i < len; ++i) {
                     if (value == null) {
-                        return '';
+
+                        return ' ';
                     }
                     value = value[fields[i]];
                 }
@@ -938,7 +942,8 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
             }
         }
         else {
-            return null;
+
+            return ' ';
         }
     }
 
@@ -2116,7 +2121,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
             csv += '\n';
             for (let i = 0; i < exportColumns.length; i++) {
                 if (exportColumns[i].field) {
-                    csv += '" ' + this.resolveFieldData(record, exportColumns[i].field) + ' "';
+                    csv += '"'+this.resolveFieldData(record, exportColumns[i].field) + '" \t';
 
                     if (i < (exportColumns.length - 1)) {
                         csv += this.csvSeparator;
@@ -2218,7 +2223,6 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                         if (!isNumber) {
                             isNumber = true;
                         }
-
                         if (!columnsum) {
                             columnsum = 0;
                         }
@@ -2248,7 +2252,12 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                 }
 
                 if (isNumber) {
-                    res_columnsum.push(columnsum);
+                    if (columnsum % 1 != 0) {
+                        res_columnsum.push(columnsum.toFixed(2));
+                    }
+                    else {
+                        res_columnsum.push(columnsum);
+                    }
                 }
                 else if (hours || minutes || seconds) {
                     res_columnsum.push(hours + ":" + minutes + ":" + seconds);
@@ -2455,8 +2464,9 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                         }
                     };
                 }
+
                 //convert null value to empty string
-                if (cell.v == null) cell.v="";
+                if (cell.v == null) cell.v = " ";
                 var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
                 if (typeof cell.v === 'number')
                     cell.t = 'n';
@@ -2464,11 +2474,12 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                     cell.t = 'b';
                 else
                     cell.t = 's';
+
                 ws[cell_ref] = cell;
             }
         }
 
-        ws['!cols'] = wscols;
+        // ws['!cols'] = wscols;
 
         // console.log("Worksheet goes here", ws);
 
@@ -2485,6 +2496,8 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         var dt: any = new Date(Date.UTC(1899, 11, 30));
         return (epoch - dt) / (24 * 60 * 60 * 1000);
     }
+
+
 
     durationvalue(v: any) {
         var patt = new RegExp("\d+:\d{2}:\d{2}$");

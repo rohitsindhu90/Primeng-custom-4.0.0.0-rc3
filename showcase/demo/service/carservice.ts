@@ -4,7 +4,7 @@ import {Car} from '../domain/car';
 
 @Injectable()
 export class CarService {
-    
+
     constructor(private http: Http) {}
 
     getCarsSmall() {
@@ -25,6 +25,13 @@ export class CarService {
         return this.http.get('showcase/resources/data/cars-large.json')
                     .toPromise()
                     .then(res => <Car[]> res.json().data)
+                    .then(data => { return data; });
+    }
+
+    getTestLarge() {
+        return this.http.get('showcase/resources/data/cc-large.json')
+                    .toPromise()
+                    .then(res => <any[]> res.json().data)
                     .then(data => { return data; });
     }
 }
