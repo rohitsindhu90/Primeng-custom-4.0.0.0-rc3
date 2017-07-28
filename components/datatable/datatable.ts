@@ -721,12 +721,14 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
     globalFilterFunction: any;
 
     columnsSubscription: Subscription;
-
+    resizeTimeout:any;
     constructor(public el: ElementRef, public domHandler: DomHandler, public differs: IterableDiffers,
         public renderer: Renderer, public changeDetector: ChangeDetectorRef, public objectUtils: ObjectUtils, private ngZone: NgZone) {
         window.onresize = (e) => {
             ngZone.run(() => {
+
                 this.calculateUnforzenWidth();
+
             })
         }
     }
@@ -841,6 +843,14 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
 
             let unfrozenRows = document.querySelectorAll('.ui-datatable-unfrozen-view .ui-datatable-scrollable-body table tr');
             let frozenRows = document.querySelectorAll('.ui-datatable-frozen-view .ui-datatable-scrollable-body table tr');
+
+            //reset rows height to there actuals
+            for (var i = 0; i < unfrozenRows.length; i++) {
+              let frozenRowsHeight = frozenRows[i]['style']['height'] ='auto';
+              let unfrozenRowHeight = unfrozenRows[i]['style']['height'] ='auto';
+
+            }
+
 
             for (var i = 0; i < unfrozenRows.length; i++) {
                 let frozenRowsHeight = frozenRows[i]['offsetHeight'];
@@ -2121,7 +2131,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
             csv += '\n';
             for (let i = 0; i < exportColumns.length; i++) {
                 if (exportColumns[i].field) {
-                    csv += '"'+this.resolveFieldData(record, exportColumns[i].field) + '" \t';
+                    csv += '"'+this.resolveFieldData(record, exportColumns[i].field) + '"';
 
                     if (i < (exportColumns.length - 1)) {
                         csv += this.csvSeparator;
@@ -2548,16 +2558,22 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
 
     initialPerUnfrozenWidth: number;
     calculateUnforzenWidth() {
-        if (this.unfrozenWidth && this.isWidthinPercentage(this.unfrozenWidth)) {
+        if(this.resizeTimeout){
+              clearTimeout(this.resizeTimeout);
+        }
+           this.resizeTimeout=setTimeout(() => {
+              if (this.unfrozenWidth && this.isWidthinPercentage(this.unfrozenWidth)) {
             this.initialPerUnfrozenWidth = this.initialPerUnfrozenWidth > 0 ? this.initialPerUnfrozenWidth : parseFloat(this.unfrozenWidth);
             let actualWidth = this.calculatePerWidth(this.initialPerUnfrozenWidth, true);
             let widthDifference = (parseFloat(this.frozenWidth) / parseFloat(actualWidth)) * 100;
             let calWidth = (this.initialPerUnfrozenWidth - widthDifference);
             this.unfrozenWidth = calWidth + '%';
+          }
+        },200);
 
-        }
+      }
 
-    }
+
 
 
     // get containerWidth() {
