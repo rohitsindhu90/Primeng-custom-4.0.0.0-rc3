@@ -110,7 +110,7 @@ export class RowExpansionLoader {
     <span class="ui-sortable-column-icon fa fa-fw fa-sort" *ngIf="col.sortable"
          [ngClass]="{'fa-sort-desc': (dt.getSortOrder(col) == -1),'fa-sort-asc': (dt.getSortOrder(col) == 1)}"></span>
     <input type="text" class="ui-column-filter ui-inputtext ui-widget ui-state-default ui-corner-all" [attr.placeholder]="col.filterPlaceholder" *ngIf="col.filter&&!col.filterTemplate" [value]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
-        (click)="dt.onFilterInputClick($event)" (change)="dt.onFilterKeyup($event.target.value, col.field, col.filterMatchMode)"/>
+        (click)="dt.onFilterInputClick($event)"  (blur)="dt.onFilterKeyup($event,$event.target.value, col.field, col.filterMatchMode)" (keyup)="dt.onFilterKeyup($event,$event.target.value, col.field, col.filterMatchMode)"/>
     <p-columnFilterTemplateLoader [column]="col" *ngIf="col.filterTemplate"></p-columnFilterTemplateLoader>
     <p-dtCheckbox *ngIf="col.selectionMode=='multiple'" (onChange)="dt.toggleRowsWithCheckbox($event)" [checked]="dt.allSelected" [disabled]="dt.isEmpty()"></p-dtCheckbox>
 </th>
@@ -1446,15 +1446,19 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         return val;
     }
 
-    onFilterKeyup(value, field, matchMode) {
+    onFilterKeyup(event,value, field, matchMode) {
+
+  if (event.keyCode === 13 ||  (event.type ==='blur') ) {
         if (this.filterTimeout) {
             clearTimeout(this.filterTimeout);
         }
-
         this.filterTimeout = setTimeout(() => {
+
             this.filter(value, field, matchMode);
+
             this.filterTimeout = null;
         }, this.filterDelay);
+      }
     }
 
     filter(value, field, matchMode) {
