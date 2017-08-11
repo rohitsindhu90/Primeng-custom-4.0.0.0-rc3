@@ -331,6 +331,7 @@ export class ScrollableView implements AfterViewInit, AfterViewChecked, OnDestro
         if (this.virtualScroll && !this.rowHeight) {
             let row = this.domHandler.findSingle(this.scrollTable, 'tr.ui-widget-content');
             if (row) {
+
                 this.rowHeight = this.domHandler.getOuterHeight(row);
             }
         }
@@ -726,7 +727,6 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         public renderer: Renderer, public changeDetector: ChangeDetectorRef, public objectUtils: ObjectUtils, private ngZone: NgZone) {
         window.onresize = (e) => {
             ngZone.run(() => {
-
                 this.calculateUnforzenWidth();
 
             })
@@ -790,9 +790,10 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
             this.dataChanged = false;
 
         }
+        if(this.calculateRowHeight && this.dataToRender && this.dataToRender.length>0){
         //resize row height based on unfrozen columns
-        this.initFrozenRows();
-
+          this.initFrozenRows();
+        }
     }
 
     ngAfterViewInit() {
@@ -838,9 +839,13 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         this.handleDataChange();
     }
 
+     currentscrollY:number;
+    calculateRowHeight:boolean=true;
     initFrozenRows() {
         if (this.unfrozenWidth) {
+            //getting scroll height
 
+            this.calculateRowHeight=false;
             let unfrozenRows = document.querySelectorAll('.ui-datatable-unfrozen-view .ui-datatable-scrollable-body table tr');
             let frozenRows = document.querySelectorAll('.ui-datatable-frozen-view .ui-datatable-scrollable-body table tr');
 
@@ -870,13 +875,17 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                 frozenHeaderRows['style']['height'] = unfrozenHeaderRows['offsetHeight'] + 'px';
 
             }
-
+            //set scroll position to original -- work around for firfox
+            //when we set rows height scroll bar position get lost in case of firfox
+            if(this.currentscrollY)
+            {
+              window.scrollTo(0,this.currentscrollY);
+            }
 
         }
 
     }
     handleDataChange() {
-
         this.dataChanged = true;
         if (this.paginator) {
             this.updatePaginator();
@@ -994,7 +1003,6 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
     paginate(event) {
         this.first = event.first;
         this.rows = event.rows;
-
         if (this.lazy) {
             this.stopFilterPropagation = true;
             this.onLazyLoad.emit(this.createLazyLoadMetadata());
@@ -1011,6 +1019,8 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
     }
 
     updateDataToRender(datasource) {
+        //setting current scroll position before rendering data
+        this.currentscrollY=window.scrollY;
         if ((this.paginator || this.virtualScroll) && datasource) {
             this.dataToRender = [];
             let startIndex: number = this.lazy ? 0 : this.first;
@@ -1031,7 +1041,9 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         if (this.rowGroupMode) {
             this.updateRowGroupMetadata();
         }
-
+        //setting flag to true so row height is being calculated for new data
+        //as well on ngAfterViewChecked
+        this.calculateRowHeight=true;
 
     }
 
