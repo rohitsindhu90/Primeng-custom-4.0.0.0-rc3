@@ -1,6 +1,6 @@
-import {NgModule, Component, ElementRef, AfterViewInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
+﻿import {NgModule, Component, ElementRef, AfterViewInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {CommonModule} from '@angular/common';
-
+import {GlobalEventsManager} from '../common/globalevent';
 declare var Chart: any;
 
 @Component({
@@ -30,6 +30,7 @@ export class UIChart implements AfterViewInit, OnDestroy {
     chart: any;
 
     eventTimeout: any;
+    subscription: any;
 
     constructor(public el: ElementRef) { }
 
@@ -41,11 +42,21 @@ export class UIChart implements AfterViewInit, OnDestroy {
         this._data = val;
         this.reinit();
     }
-
     ngAfterViewInit() {
         this.initChart();
         this.initialized = true;
+        this.subscription = GlobalEventsManager.onChartDefaultChangeEvent.subscribe((res: any) => {
+              Chart.defaults.global.defaultFontColor = res;
+              this.refresh();
+        })
     }
+
+    // ngAfterViewChecked() {
+    //     if (this.chart && Chart.defaults.global.defaultFontColor != this.backgroundcolor) {
+    //         this.backgroundcolor = Chart.defaults.global.defaultFontColor;
+    //         this.refresh();
+    //     }
+    // }
 
     onCanvasClick(event) {
         if (this.chart) {
@@ -69,8 +80,9 @@ export class UIChart implements AfterViewInit, OnDestroy {
 
     //override default sittings
     overRideGlobal() {
-        Chart.defaults.global.defaultColor = '#00E9D3';
+        // Chart.defaults.global.defaultColor = '#00E9D3';
         Chart.defaults.global.elements.rectangle.backgroundColor = '#00E9D3';
+
     }
 
     //external pluging for tooltip
@@ -226,6 +238,7 @@ export class UIChart implements AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         if (this.chart) {
+            this.subscription = null;
             this.chart.destroy();
             this.initialized = false;
             this.chart = null;

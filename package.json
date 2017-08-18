@@ -1,6 +1,6 @@
 {
   "name": "primeng-dev-ng4",
-  "version": "4.0.2-RC40",
+  "version": "4.0.2-RC50",
   "scripts": {
     "tsc": "tsc",
     "tsc:w": "tsc -w",

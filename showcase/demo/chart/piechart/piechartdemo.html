@@ -4,9 +4,10 @@
         <span>A pie chart is a circular statistical graphic, which is divided into slices to illustrate numerical proportion.</span>
     </div>
 </div>
-
+<input type="button" value='Change Defaults Color' (click)="changecolor();">
 <div class="content-section implementation">
-    <p-chart type="pie" [data]="data" [options]="{ showAllTooltips: true}"></p-chart>
+    <p-chart type="pie" [data]="data" width="100" [options]="options"></p-chart>
+      <p-chart type="pie" [data]="data" width="100" [options]="options"></p-chart>
 </div>
 
 <div class="content-section source">
