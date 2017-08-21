@@ -80,7 +80,7 @@ export class UIChart implements AfterViewInit, OnDestroy {
 
     //override default sittings
     overRideGlobal() {
-        // Chart.defaults.global.defaultColor = '#00E9D3';
+        Chart.defaults.global.defaultColor = '#00E9D3';
         Chart.defaults.global.elements.rectangle.backgroundColor = '#00E9D3';
 
     }
