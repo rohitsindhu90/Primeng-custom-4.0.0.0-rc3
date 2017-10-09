@@ -31,7 +31,7 @@ export class BarChartDemo {
     }
 
     generateOption() {
-        this.options = ChartHelper.getChartOptions(ChartType.bar, true, false, true, undefined, undefined, undefined, false, undefined, 16);
+        this.options = ChartHelper.getInvoiceSummaryCustomToolTipwithFormulaChartOptions(ChartType.bar, false, true, true);
     }
 }
 export class ChartHelper {
@@ -337,6 +337,7 @@ export class ChartHelper {
                                 ctx = chartInstance.ctx;
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
+                             ctx.fillStyle = Chart.defaults.global.defaultFontColor;
 
                             this.data.datasets.forEach(function(dataset: any, i: any) {
                                 var meta = chartInstance.controller.getDatasetMeta(i);

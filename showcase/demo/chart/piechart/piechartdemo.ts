@@ -40,6 +40,8 @@ export class PieChartDemo {
       debugger;
       alert('test');
       console.log('color changed');
+       Chart.defaults.global.defaultFontColor = 'red';
+      Chart.defaults.global.tooltipFillColor = "red";
       GlobalEventsManager.onChartDefaultChangeEvent.emit('red');
     }
 }
