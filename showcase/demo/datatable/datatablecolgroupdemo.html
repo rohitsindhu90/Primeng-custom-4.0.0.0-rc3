@@ -14,15 +14,15 @@
                      [paginator]="true"
                      [rowsPerPageOptions]="[5,10,20]"
                      scrollable="true"
-                     frozenWidth="150px"
+                     frozenWidth="200px"
                      unfrozenWidth="500px"
                      [style]="{'margin-top':'30px'}"  >
         <p-headerColumnGroup>
           <p-row>
-                <p-column [style]="{'width':'900px'}" styleClass="col-group-header" colspan="6"></p-column>
+                <p-column [style]="{'width':columnhide?'900px':'750px'}" styleClass="col-group-header" colspan="{{columnhide?6:5}}"></p-column>
           </p-row>
             <p-row>
-                <p-column [style]="{'width':'150px'}"  frozen="true" header="Brand" field="brand" rowspan="4" [filter]="true" filterMatchMode="contains"></p-column>
+                <p-column [style]="{'width':'200px'}"  frozen="true" header="Brand" field="brand" rowspan="4" [filter]="true" filterMatchMode="contains"></p-column>
                 <p-column [style]="{'width':'150px'}"  *ngIf="columnhide"  header="TEST BRAND" field="brand" sortable="true"  rowspan="3" filter="true" filterMatchMode="contains"></p-column>
                 <p-column [style]="{'width':'150px'}" header="Sale Rate" colspan="4"></p-column>
             </p-row>
@@ -38,7 +38,7 @@
             </p-row>
         </p-headerColumnGroup>
 
-        <p-column [style]="{'width':'150px'}" frozen="true" field="brand"></p-column>
+        <p-column [style]="{'width':'200px'}" frozen="true" field="brand"></p-column>
         <p-column [style]="{'width':'150px'}"  *ngIf="columnhide"  field="brand"></p-column>
         <p-column field="lastYearSale" [style]="{'width':'150px'}"></p-column>
         <p-column field="thisYearSale" [style]="{'width':'150px'}"></p-column>

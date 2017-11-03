@@ -500,13 +500,11 @@ export class AutoComplete implements AfterViewInit,AfterViewChecked,DoCheck,Cont
     }
 
     onInputFocus(event) {
-        debugger;
         this.focus = true;
         this.onFocus.emit(event);
     }
 
     onInputBlur(event) {
-        debugger;
         this.focus = false;
         this.onModelTouched();
         this.onBlur.emit(event);

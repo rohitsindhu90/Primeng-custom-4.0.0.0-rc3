@@ -7,9 +7,9 @@ import {Message} from '../../../components/common/api';
     providers: [ConfirmationService]
 })
 export class ConfirmDialogDemo {
-    
+
     msgs: Message[] = [];
-    
+
     constructor(private confirmationService: ConfirmationService) {}
 
     confirm1() {
@@ -21,9 +21,13 @@ export class ConfirmDialogDemo {
                 this.msgs = [];
                 this.msgs.push({severity:'info', summary:'Confirmed', detail:'You have accepted'});
             }
+            ,  reject: () => {
+                  this.msgs = [];
+                  this.msgs.push({severity:'info', summary:'Confirmed', detail:'You have accepted'});
+              }
         });
     }
-    
+
     confirm2() {
         this.confirmationService.confirm({
             message: 'Do you want to delete this record?',
@@ -32,7 +36,11 @@ export class ConfirmDialogDemo {
             accept: () => {
                 this.msgs = [];
                 this.msgs.push({severity:'info', summary:'Confirmed', detail:'Record deleted'});
-            }
+            },
+            reject: () => {
+                 this.msgs = [];
+                 this.msgs.push({severity:'info', summary:'Confirmed', detail:'You have accepted'});
+             }
         });
     }
 }

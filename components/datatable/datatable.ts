@@ -1,16 +1,18 @@
-﻿import {NgModule, Component, ElementRef, AfterContentInit, AfterViewInit, AfterViewChecked, OnInit, OnDestroy, DoCheck, Input, ViewContainerRef, ViewChild,
-    Output, SimpleChange, EventEmitter, ContentChild, ContentChildren, Renderer, IterableDiffers, QueryList, TemplateRef, ChangeDetectorRef, Inject, forwardRef, NgZone} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms'
-import {SharedModule} from '../common/shared';
-import {PaginatorModule} from '../paginator/paginator';
-import {Column, Header, Footer, HeaderColumnGroup, FooterColumnGroup, PrimeTemplate} from '../common/shared';
-import {LazyLoadEvent, FilterMetadata, SortMeta} from '../common/api';
-import {DomHandler} from '../dom/domhandler';
-import {ObjectUtils} from '../utils/ObjectUtils';
-import {Subscription} from 'rxjs/Subscription';
-import {BlockableUI} from '../common/api';
-import {GlobalEventsManager} from '../common/globalevent';
+﻿import {
+    NgModule, Component, ElementRef, AfterContentInit, AfterViewInit, AfterViewChecked, OnInit, OnDestroy, DoCheck, Input, ViewContainerRef, ViewChild,
+    Output, SimpleChange, EventEmitter, ContentChild, ContentChildren, Renderer, IterableDiffers, QueryList, TemplateRef, ChangeDetectorRef, Inject, forwardRef, NgZone
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'
+import { SharedModule } from '../common/shared';
+import { PaginatorModule } from '../paginator/paginator';
+import { Column, Header, Footer, HeaderColumnGroup, FooterColumnGroup, PrimeTemplate } from '../common/shared';
+import { LazyLoadEvent, FilterMetadata, SortMeta } from '../common/api';
+import { DomHandler } from '../dom/domhandler';
+import { ObjectUtils } from '../utils/ObjectUtils';
+import { Subscription } from 'rxjs/Subscription';
+import { BlockableUI } from '../common/api';
+import { GlobalEventsManager } from '../common/globalevent';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx-style';
 
@@ -722,7 +724,9 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
     globalFilterFunction: any;
 
     columnsSubscription: Subscription;
-    resizeTimeout:any;
+    resizeTimeout: any;
+    datatableHeaderWidth: number;
+    // public emptyMessageAlignmentTimeout:any;
     constructor(public el: ElementRef, public domHandler: DomHandler, public differs: IterableDiffers,
         public renderer: Renderer, public changeDetector: ChangeDetectorRef, public objectUtils: ObjectUtils, private ngZone: NgZone) {
         window.onresize = (e) => {
@@ -790,10 +794,11 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
             this.dataChanged = false;
 
         }
-        if(this.calculateRowHeight && this.dataToRender && this.dataToRender.length>0){
-        //resize row height based on unfrozen columns
-          this.initFrozenRows();
+        if (this.calculateRowHeight && this.dataToRender && this.dataToRender.length > 0) {
+            //resize row height based on unfrozen columns
+            this.initFrozenRows();
         }
+        this.emptyMessageAlignment();
     }
 
     ngAfterViewInit() {
@@ -839,20 +844,20 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         this.handleDataChange();
     }
 
-     currentscrollY:number;
-    calculateRowHeight:boolean=true;
+    currentscrollY: number;
+    calculateRowHeight: boolean = true;
     initFrozenRows() {
         if (this.unfrozenWidth) {
             //getting scroll height
 
-            this.calculateRowHeight=false;
+            this.calculateRowHeight = false;
             let unfrozenRows = document.querySelectorAll('.ui-datatable-unfrozen-view .ui-datatable-scrollable-body table tr');
             let frozenRows = document.querySelectorAll('.ui-datatable-frozen-view .ui-datatable-scrollable-body table tr');
 
             //reset rows height to there actuals
             for (var i = 0; i < unfrozenRows.length; i++) {
-              let frozenRowsHeight = frozenRows[i]['style']['height'] ='auto';
-              let unfrozenRowHeight = unfrozenRows[i]['style']['height'] ='auto';
+                let frozenRowsHeight = frozenRows[i]['style']['height'] = 'auto';
+                let unfrozenRowHeight = unfrozenRows[i]['style']['height'] = 'auto';
 
             }
 
@@ -877,9 +882,8 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
             }
             //set scroll position to original -- work around for firfox
             //when we set rows height scroll bar position get lost in case of firfox
-            if(this.currentscrollY)
-            {
-              window.scrollTo(0,this.currentscrollY);
+            if (this.currentscrollY) {
+                window.scrollTo(0, this.currentscrollY);
             }
 
         }
@@ -1018,9 +1022,48 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
 
     }
 
+    emptyMessageAlignment() {
+        let unfrozenclass = "";
+        let frozenWidth:number = 0;
+        if (this.unfrozenWidth) {
+            unfrozenclass = ".ui-datatable-unfrozen-view";
+
+            if (document.querySelectorAll('.ui-datatable-unfrozen-view table tr th.col-group-header')[0])
+                frozenWidth = parseInt(this.frozenWidth) - (parseInt(this.frozenWidth)-150)
+        }
+
+        if (this.isEmpty()) {
+            let ele = this.el.nativeElement.querySelectorAll(unfrozenclass + ' .ui-datatable-scrollable-header-box > table');
+            if (ele.length > 0) {
+                if (this.datatableHeaderWidth != ele[0].clientWidth) {
+                    this.datatableHeaderWidth = ele[0].clientWidth;
+
+                    let emptyContentWidth = this.el.nativeElement.querySelectorAll(unfrozenclass + " .ui-datatable-scrollable-body table")[0].clientWidth;
+                    if (this.datatableHeaderWidth > 0 && emptyContentWidth > 0 && emptyContentWidth != this.datatableHeaderWidth) {
+                        this.setEmptyMessageWidth(unfrozenclass, (this.datatableHeaderWidth - frozenWidth));
+                    }
+                }
+            }
+        }
+        if (!this.isEmpty() && this.datatableHeaderWidth) {
+            this.datatableHeaderWidth = undefined;
+            this.setEmptyMessageWidth(unfrozenclass, this.datatableHeaderWidth);
+        }
+
+
+    }
+
+    setEmptyMessageWidth(classname: string, width: number) {
+        let msgcontainer = this.el.nativeElement.querySelectorAll(classname + " .ui-datatable-scrollable-body table")[0];
+        if (msgcontainer) {
+            msgcontainer.style.width = width ? width + 'px' : '';
+        }
+
+    }
+
     updateDataToRender(datasource) {
         //setting current scroll position before rendering data
-        this.currentscrollY=window.scrollY;
+        this.currentscrollY = window.scrollY;
         if ((this.paginator || this.virtualScroll) && datasource) {
             this.dataToRender = [];
             let startIndex: number = this.lazy ? 0 : this.first;
@@ -1043,7 +1086,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         }
         //setting flag to true so row height is being calculated for new data
         //as well on ngAfterViewChecked
-        this.calculateRowHeight=true;
+        this.calculateRowHeight = true;
 
     }
 
@@ -1458,19 +1501,19 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         return val;
     }
 
-    onFilterKeyup(event,value, field, matchMode) {
+    onFilterKeyup(event, value, field, matchMode) {
 
-  if (event.keyCode === 13 ||  (event.type ==='blur') ) {
-        if (this.filterTimeout) {
-            clearTimeout(this.filterTimeout);
+        if (event.keyCode === 13 || (event.type === 'blur')) {
+            if (this.filterTimeout) {
+                clearTimeout(this.filterTimeout);
+            }
+            this.filterTimeout = setTimeout(() => {
+
+                this.filter(value, field, matchMode);
+
+                this.filterTimeout = null;
+            }, this.filterDelay);
         }
-        this.filterTimeout = setTimeout(() => {
-
-            this.filter(value, field, matchMode);
-
-            this.filterTimeout = null;
-        }, this.filterDelay);
-      }
     }
 
     filter(value, field, matchMode) {
@@ -2147,7 +2190,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
             csv += '\n';
             for (let i = 0; i < exportColumns.length; i++) {
                 if (exportColumns[i].field) {
-                    csv += '"'+this.resolveFieldData(record, exportColumns[i].field) + '"';
+                    csv += '"' + this.resolveFieldData(record, exportColumns[i].field) + '"';
 
                     if (i < (exportColumns.length - 1)) {
                         csv += this.csvSeparator;
@@ -2574,20 +2617,20 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
 
     initialPerUnfrozenWidth: number;
     calculateUnforzenWidth() {
-        if(this.resizeTimeout){
-              clearTimeout(this.resizeTimeout);
+        if (this.resizeTimeout) {
+            clearTimeout(this.resizeTimeout);
         }
-           this.resizeTimeout=setTimeout(() => {
-              if (this.unfrozenWidth && this.isWidthinPercentage(this.unfrozenWidth)) {
-            this.initialPerUnfrozenWidth = this.initialPerUnfrozenWidth > 0 ? this.initialPerUnfrozenWidth : parseFloat(this.unfrozenWidth);
-            let actualWidth = this.calculatePerWidth(this.initialPerUnfrozenWidth, true);
-            let widthDifference = (parseFloat(this.frozenWidth) / parseFloat(actualWidth)) * 100;
-            let calWidth = (this.initialPerUnfrozenWidth - widthDifference);
-            this.unfrozenWidth = calWidth + '%';
-          }
-        },200);
+        this.resizeTimeout = setTimeout(() => {
+            if (this.unfrozenWidth && this.isWidthinPercentage(this.unfrozenWidth)) {
+                this.initialPerUnfrozenWidth = this.initialPerUnfrozenWidth > 0 ? this.initialPerUnfrozenWidth : parseFloat(this.unfrozenWidth);
+                let actualWidth = this.calculatePerWidth(this.initialPerUnfrozenWidth, true);
+                let widthDifference = (parseFloat(this.frozenWidth) / parseFloat(actualWidth)) * 100;
+                let calWidth = (this.initialPerUnfrozenWidth - widthDifference);
+                this.unfrozenWidth = calWidth + '%';
+            }
+        }, 200);
 
-      }
+    }
 
 
 
