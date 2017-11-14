@@ -4,9 +4,9 @@
         <span>A bar chart or bar graph is a chart that presents Grouped data with rectangular bars with lengths proportional to the values that they represent.</span>
     </div>
 </div>
-
+<p-growl [value]="msgs"></p-growl>
 <div class="content-section implementation">
-    <p-chart type="bar" [data]="data" [options]="options" ></p-chart>
+    <p-chart type="bar" [data]="data" [options]="options" (onDataSelect)="onDataSelect($event);"></p-chart>
 </div>
 
 <div class="content-section source">

@@ -1,11 +1,12 @@
 import {Component} from '@angular/core';
+import {Message} from '../../../../components/common/api';
 declare var Chart: any;
 
 @Component({
     templateUrl: 'showcase/demo/chart/barchart/barchartdemo.html'
 })
 export class BarChartDemo {
-
+    msgs: Message[];
     data: any;
     options: any;
     constructor() {
@@ -29,6 +30,14 @@ export class BarChartDemo {
         this.generateOption();
 
     }
+    onDataSelect(event: any) {
+          this.msgs = [];
+          this.msgs.push({severity: 'info', summary: 'Graph Selected', detail: 'Bar selected'});
+      }
+
+      onRowSelect(event) {
+
+      }
 
     generateOption() {
         this.options = ChartHelper.getInvoiceSummaryCustomToolTipwithFormulaChartOptions(ChartType.bar, false, true, true);

@@ -1025,7 +1025,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
     emptyMessageAlignment() {
         let unfrozenclass = "";
         let frozenWidth:number = 0;
-        if (this.unfrozenWidth) {
+        if (this.unfrozenWidth && this.frozenWidth && parseInt(this.frozenWidth)>0) {
             unfrozenclass = ".ui-datatable-unfrozen-view";
 
             if (document.querySelectorAll('.ui-datatable-unfrozen-view table tr th.col-group-header')[0])
@@ -1033,6 +1033,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         }
 
         if (this.isEmpty()) {
+
             let ele = this.el.nativeElement.querySelectorAll(unfrozenclass + ' .ui-datatable-scrollable-header-box > table');
             if (ele.length > 0) {
                 if (this.datatableHeaderWidth != ele[0].clientWidth) {
@@ -2446,6 +2447,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                     };
                 }
                 else if (this.displaysum && R === (data.length - 1)) {
+                    cell.t='n';
                     cell.s = {
                         font: {
 
@@ -2541,6 +2543,8 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                     cell.t = 'n';
                 else if (typeof cell.v === 'boolean')
                     cell.t = 'b';
+                else if (cell.t ==='n' && !isNaN(Number(cell.v)))
+                    cell.t = 'n';
                 else
                     cell.t = 's';
 
