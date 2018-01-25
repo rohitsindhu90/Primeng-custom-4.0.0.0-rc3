@@ -32,6 +32,7 @@ export * from './components/inputmask/inputmask';
 export * from './components/inputswitch/inputswitch';
 export * from './components/inputtext/inputtext';
 export * from './components/inputtextarea/inputtextarea';
+export * from './components/keyfilter/keyfilter';
 export * from './components/lightbox/lightbox';
 export * from './components/listbox/listbox';
 export * from './components/megamenu/megamenu';
@@ -66,4 +67,3 @@ export * from './components/tooltip/tooltip';
 export * from './components/tree/tree';
 export * from './components/treetable/treetable';
 export * from './components/tristatecheckbox/tristatecheckbox';
-
