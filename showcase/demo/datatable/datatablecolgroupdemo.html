@@ -10,6 +10,7 @@
 <p>Hide Column</p>
 <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="columnhide" class="float-right"></p-inputSwitch>
 <div class="content-section implementation">
+  <form>
     <p-dataTable [value]="sales" [rows]="10"
                      [paginator]="true"
                      [rowsPerPageOptions]="[5,10,20]"
@@ -53,6 +54,7 @@
             </p-row>
         </p-footerColumnGroup>
     </p-dataTable>
+  </form>
 </div>
 
 <div class="content-section source">

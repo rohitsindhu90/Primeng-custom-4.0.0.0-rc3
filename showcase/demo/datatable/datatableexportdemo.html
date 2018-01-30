@@ -8,8 +8,21 @@
 </div>
 
 <div class="content-section implementation">
-
-    <p-dataTable #dt id="grid-call-class" class="ui-datatable-scroll-margin-fix"
+  <form>
+  <p-dataTable #dt [value]="cars" exportFilename="cars" [(selection)]="selectedCars" selectionMode="multiple" [metaKeySelection]="false">
+          <p-header>
+              <div class="ui-helper-clearfix">
+                  <button type="button" pButton icon="fa-file-o" iconPos="left" label="All Data" (click)="dt.exportExcel(true)" style="float:left"></button>
+                  <button type="button" pButton icon="fa-file" iconPos="left" label="Selection Only" (click)="dt.exportCSV({selectionOnly:true})" style="float:right"></button>
+              </div>
+          </p-header>
+          <!-- <p-column field="vin" header="Vin"></p-column> -->
+          <p-column field="year" header="Year"></p-column>
+          <!-- <p-column field="brand" header="Brand"></p-column> -->
+          <!-- <p-column field="color" header="Color"></p-column> -->
+      </p-dataTable>
+    </form>
+    <p-dataTable #dt1 id="grid-call-class" class="ui-datatable-scroll-margin-fix"
                     [value]="cc"
                     [rows]="10"
                     [paginator]="true"

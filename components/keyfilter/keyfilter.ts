@@ -125,8 +125,11 @@ export class KeyFilter implements Validator {
         let value = this.el.nativeElement.value;
         if (!this.regex.test(value)) {
             return {
-                validatePattern: false
+                validatePattern: true
             }
+        }
+        else{
+          return null;
         }
     }
 

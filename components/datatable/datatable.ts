@@ -2535,7 +2535,6 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                         }
                     };
                 }
-
                 //convert null value to empty string
                 if (cell.v == null) cell.v = " ";
                 var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });

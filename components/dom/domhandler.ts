@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class DomHandler {
 
     public static zindex: number = 1000;
+    private browser: any;
 
     public addClass(element: any, className: string): void {
         if (element.classList)
@@ -43,7 +44,7 @@ export class DomHandler {
     }
 
     public siblings(element: any): any {
-        return Array.prototype.filter.call(element.parentNode.children, function (child) {
+        return Array.prototype.filter.call(element.parentNode.children, function(child) {
             return child !== element;
         });
     }
@@ -102,7 +103,7 @@ export class DomHandler {
 
         if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height) {
             top = targetOffset.top + windowScrollTop - elementOuterHeight;
-            if(top < 0) {
+            if (top < 0) {
                 top = 0 + windowScrollTop;
             }
         }
@@ -176,7 +177,7 @@ export class DomHandler {
 
         let last = +new Date();
         let opacity = 0;
-        let tick = function () {
+        let tick = function() {
             opacity = +element.style.opacity + (new Date().getTime() - last) / duration;
             element.style.opacity = opacity;
             last = +new Date();
@@ -219,7 +220,7 @@ export class DomHandler {
 
     public matches(element, selector: string): boolean {
         var p = Element.prototype;
-        var f = p['matches'] || p.webkitMatchesSelector || p['mozMatchesSelector'] || p.msMatchesSelector || function (s) {
+        var f = p['matches'] || p.webkitMatchesSelector || p['mozMatchesSelector'] || p.msMatchesSelector || function(s) {
             return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
         };
         return f.call(element, selector);
@@ -311,7 +312,7 @@ export class DomHandler {
             y += el.offsetTop;
         }
 
-        return {left: x, top: y};
+        return { left: x, top: y };
     }
 
     getUserAgent(): string {
@@ -336,8 +337,8 @@ export class DomHandler {
 
         var edge = ua.indexOf('Edge/');
         if (edge > 0) {
-           // Edge (IE 12+) => return version number
-           return true;
+            // Edge (IE 12+) => return version number
+            return true;
         }
 
         // other browser
@@ -345,19 +346,19 @@ export class DomHandler {
     }
 
     appendChild(element: any, target: any) {
-      debugger;
-        if(this.isElement(target))
+        debugger;
+        if (this.isElement(target))
             target.appendChild(element);
-        else if(target.el && target.el.nativeElement)
+        else if (target.el && target.el.nativeElement)
             target.el.nativeElement.appendChild(element);
         else
             throw 'Cannot append ' + target + ' to ' + element;
     }
 
     removeChild(element: any, target: any) {
-        if(this.isElement(target))
+        if (this.isElement(target))
             target.removeChild(element);
-        else if(target.el && target.el.nativeElement)
+        else if (target.el && target.el.nativeElement)
             target.el.nativeElement.removeChild(element);
         else
             throw 'Cannot remove ' + element + ' from ' + target;
@@ -379,4 +380,40 @@ export class DomHandler {
 
         return scrollbarWidth;
     }
+
+    getBrowser() {
+        if (!this.browser) {
+            let matched = this.resolveUserAgent();
+            this.browser = {};
+
+            if (matched.browser) {
+                this.browser[matched.browser] = true;
+                this.browser['version'] = matched.version;
+            }
+
+            if (this.browser['chrome']) {
+                this.browser['webkit'] = true;
+            } else if (this.browser['webkit']) {
+                this.browser['safari'] = true;
+            }
+        }
+
+        return this.browser;
+    }
+
+    resolveUserAgent() {
+        let ua = navigator.userAgent.toLowerCase();
+        let match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
+            /(webkit)[ \/]([\w.]+)/.exec(ua) ||
+            /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
+            /(msie) ([\w.]+)/.exec(ua) ||
+            ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) ||
+            [];
+
+        return {
+            browser: match[1] || "",
+            version: match[2] || "0"
+        };
+    }
+
 }

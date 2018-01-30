@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
 import {CountryService} from '../service/countryservice';
-
+import { ConfirmationService, Confirmation } from '../../../components/common/api';
 @Component({
-    templateUrl: 'showcase/demo/autocomplete/autocompletedemo.html'
+    templateUrl: 'showcase/demo/autocomplete/autocompletedemo.html',
+    providers:[ConfirmationService]
 })
 export class AutoCompleteDemo {
 
@@ -20,13 +21,21 @@ export class AutoCompleteDemo {
 
     brand: string;
 
-    constructor(private countryService: CountryService) { }
+    constructor(private countryService: CountryService,private confirmationservice:ConfirmationService) {
+        this.brand=this.brands[0];
+
+        this.countryService.getCountries().then(countries => {
+            this.country=countries[0];
+          });
+    }
 
     filterCountrySingle(event) {
         let query = event.query;
         this.countryService.getCountries().then(countries => {
             this.filteredCountriesSingle = this.filterCountry(query, countries);
         });
+
+
     }
 
     filterCountryMultiple(event) {
@@ -48,6 +57,17 @@ export class AutoCompleteDemo {
         return filtered;
     }
 
+openpop(){
+  setTimeout(()=>{
+    this.confirmationservice.confirm({
+               message: 'Are you sure you want to log out?',
+               accept: () => {
+                   alert('selected');
+               }
+           });
+  },10000);
+
+}
     filterBrands(event) {
         this.filteredBrands = [];
         for(let i = 0; i < this.brands.length; i++) {

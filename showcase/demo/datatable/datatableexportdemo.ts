@@ -14,21 +14,21 @@ export class DataTableExportDemo implements OnInit {
     ngOnInit() {
         this.carService.getCarsSmall().then(cars => {
             this.cars = cars;
-            for(let i=0;i<=10000;i++){
-                  this.cars.push(this.cars[0]);
-
-            }
+            // for(let i=0;i<=10;i++){
+            //       this.cars.push(this.cars[0]);
+            //
+            // }
 
         }
         );
 
-        this.carService.getTestLarge().then(c => {
-          this.cc=c;
-        //   let res=c;
-        //   for(let i=0;i<=10000;i++){
-        //   this.cc.push(c[0]);
-        // }
-      });
+      //   this.carService.getTestLarge().then(c => {
+      //     this.cc=c;
+      //   //   let res=c;
+      //   //   for(let i=0;i<=10000;i++){
+      //   //   this.cc.push(c[0]);
+      //   // }
+      // });
 
 
     }

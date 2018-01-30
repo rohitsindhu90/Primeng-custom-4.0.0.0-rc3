@@ -22,7 +22,7 @@ export class KeyFilterDemo {
 
     blockSpace: RegExp = /[^\s]/;
 
-    ccRegex: RegExp = /[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/;
+    ccRegex: RegExp = /^[0-9]+(\.[0-9]{1,2})?$/;
 
     cc: string;
 

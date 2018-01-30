@@ -356,6 +356,11 @@ import {HomePageComponent} from './homepage.component';
                 resolve(require('./demo/treetable/treetabledemo.module')['TreeTableDemoModule']);
               });
             })},
+            {path: 'keyfilter', loadChildren: () => new Promise(function (resolve) {
+              (require as any).ensure([], function (require: any) {
+                resolve(require('./demo/keyfilter/keyfilterdemo.module')['KeyFilterDemoModule']);
+              });
+            })},
             {path: 'tristatecheckbox', loadChildren: () => new Promise(function (resolve) {
               (require as any).ensure([], function (require: any) {
                 resolve(require('./demo/tristatecheckbox/tristatecheckboxdemo.module')['TriStateCheckboxDemoModule']);
@@ -366,7 +371,7 @@ import {HomePageComponent} from './homepage.component';
                 resolve(require('./demo/validation/validationdemo.module')['ValidationDemoModule']);
               });
             })}
-        ])    
+        ])
     ],
     exports: [RouterModule]
 })
