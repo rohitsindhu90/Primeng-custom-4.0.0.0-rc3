@@ -114,7 +114,7 @@ export class KeyFilter implements Validator {
             return;
         }
 
-        ok = this.regex.test(cc);
+        ok =  this.regex.test(cc);
 
         if (!ok) {
             e.preventDefault();
@@ -123,7 +123,7 @@ export class KeyFilter implements Validator {
 
     validate(c: AbstractControl): { [key: string]: any } {
         let value = this.el.nativeElement.value;
-        if (!this.regex.test(value)) {
+        if (value && !this.regex.test(value)) {
             return {
                 validatePattern: true
             }
