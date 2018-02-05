@@ -17,7 +17,8 @@ export class ConfirmDialogDemo {
             message: 'Are you sure that you want to perform this action?',
             header: 'Confirmation',
             icon: 'fa fa-question-circle',
-            accept: () => {
+            accept: (param:any) => {
+              alert(param);
                 this.msgs = [];
                 this.msgs.push({severity:'info', summary:'Confirmed', detail:'You have accepted'});
             }

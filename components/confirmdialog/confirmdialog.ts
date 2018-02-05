@@ -280,9 +280,9 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
         this.subscription.unsubscribe();
     }
 
-    accept() {
+    accept(param:any) {
         if (this.confirmation.acceptEvent) {
-            this.confirmation.acceptEvent.emit();
+            this.confirmation.acceptEvent.emit(param);
         }
 
         this.hide();
