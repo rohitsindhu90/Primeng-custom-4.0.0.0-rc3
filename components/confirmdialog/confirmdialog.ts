@@ -81,6 +81,8 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
 
     @Input() key: string;
 
+    @Input() calcwidthonparent: boolean;
+
     @ContentChild(Footer) footer;
 
     confirmation: Confirmation;
@@ -176,6 +178,7 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
     }
 
     center() {
+        debugger;
         let container = this.el.nativeElement.children[0];
         let elementWidth = this.domHandler.getOuterWidth(container);
         let elementHeight = this.domHandler.getOuterHeight(container);
@@ -188,6 +191,12 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
             container.style.visibility = 'visible';
         }
         let viewport = this.domHandler.getViewport();
+        if (this.calcwidthonparent) {
+            let parentEle = this.el.nativeElement.parentElement;
+            if (parentEle) {
+                viewport = {width:parentEle.offsetWidth,height:parentEle.offsetHeight};
+            }
+        }
         let x = (viewport.width - elementWidth) / 2;
         let y = (viewport.height - elementHeight) / 2;
 
@@ -235,7 +244,7 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
         if (this.closeOnEscape && this.closable && !this.documentEscapeListener) {
             this.documentEscapeListener = this.renderer.listen('document', 'keydown', (event) => {
                 if (event.which == 27) {
-                    if (this.el.nativeElement.children[0].style.zIndex == DomHandler.zindex && this.visible)  {
+                    if (this.el.nativeElement.children[0].style.zIndex == DomHandler.zindex && this.visible) {
                         this.close(event);
                     }
                 }
@@ -280,7 +289,7 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
         this.subscription.unsubscribe();
     }
 
-    accept(param:any) {
+    accept(param: any) {
         if (this.confirmation.acceptEvent) {
             this.confirmation.acceptEvent.emit(param);
         }
