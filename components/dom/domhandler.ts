@@ -346,7 +346,6 @@ export class DomHandler {
     }
 
     appendChild(element: any, target: any) {
-        debugger;
         if (this.isElement(target))
             target.appendChild(element);
         else if (target.el && target.el.nativeElement)

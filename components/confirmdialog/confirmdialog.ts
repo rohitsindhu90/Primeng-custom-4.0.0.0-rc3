@@ -178,24 +178,33 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
     }
 
     center() {
-        debugger;
+        let parentElementViewport;
         let container = this.el.nativeElement.children[0];
         let elementWidth = this.domHandler.getOuterWidth(container);
         let elementHeight = this.domHandler.getOuterHeight(container);
+        if (this.calcwidthonparent) {
+            let parentEle = this.el.nativeElement.parentElement;
+            parentElementViewport = {width:parentEle.offsetWidth,height:parentEle.offsetHeight};
+        }
+
         if (elementWidth == 0 && elementHeight == 0) {
             container.style.visibility = 'hidden';
             container.style.display = 'block';
+            if(parentElementViewport){
+                  elementWidth=(parentElementViewport.width - elementWidth) / 1.5;
+                  elementHeight=(parentElementViewport.height - elementHeight) / 1.5;
+            }
+            else{
             elementWidth = this.domHandler.getOuterWidth(container);
             elementHeight = this.domHandler.getOuterHeight(container);
+          }
             container.style.display = 'none';
             container.style.visibility = 'visible';
         }
         let viewport = this.domHandler.getViewport();
-        if (this.calcwidthonparent) {
-            let parentEle = this.el.nativeElement.parentElement;
-            if (parentEle) {
-                viewport = {width:parentEle.offsetWidth,height:parentEle.offsetHeight};
-            }
+        if (this.calcwidthonparent && parentElementViewport) {
+                viewport = parentElementViewport;
+
         }
         let x = (viewport.width - elementWidth) / 2;
         let y = (viewport.height - elementHeight) / 2;
