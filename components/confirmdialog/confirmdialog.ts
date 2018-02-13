@@ -184,26 +184,26 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
         let elementHeight = this.domHandler.getOuterHeight(container);
         if (this.calcwidthonparent) {
             let parentEle = this.el.nativeElement.parentElement;
-            parentElementViewport = {width:parentEle.offsetWidth,height:parentEle.offsetHeight};
+            parentElementViewport = { width: parentEle.offsetWidth, height: parentEle.offsetHeight };
         }
 
         if (elementWidth == 0 && elementHeight == 0) {
             container.style.visibility = 'hidden';
             container.style.display = 'block';
-            if(parentElementViewport){
-                  elementWidth=(parentElementViewport.width - elementWidth) / 1.5;
-                  elementHeight=(parentElementViewport.height - elementHeight) / 1.5;
+            if (parentElementViewport) {
+                elementWidth = (parentElementViewport.width - elementWidth) / 1.5;
+                elementHeight = (parentElementViewport.height - elementHeight) / 1.5;
             }
-            else{
-            elementWidth = this.domHandler.getOuterWidth(container);
-            elementHeight = this.domHandler.getOuterHeight(container);
-          }
+            else {
+                elementWidth = this.domHandler.getOuterWidth(container);
+                elementHeight = this.domHandler.getOuterHeight(container);
+            }
             container.style.display = 'none';
             container.style.visibility = 'visible';
         }
         let viewport = this.domHandler.getViewport();
         if (this.calcwidthonparent && parentElementViewport) {
-                viewport = parentElementViewport;
+            viewport = parentElementViewport;
 
         }
         let x = (viewport.width - elementWidth) / 2;
@@ -218,14 +218,24 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
             this.mask = document.createElement('div');
             this.mask.style.zIndex = this.el.nativeElement.children[0].style.zIndex - 1;
             this.domHandler.addMultipleClasses(this.mask, 'ui-widget-overlay ui-dialog-mask');
-            document.body.appendChild(this.mask);
+            if (this.calcwidthonparent) {
+                this.el.nativeElement.parentElement.appendChild(this.mask);
+            }
+            else {
+                document.body.appendChild(this.mask);
+            }
             this.domHandler.addClass(document.body, 'ui-overflow-hidden');
         }
     }
 
     disableModality() {
         if (this.mask) {
-            document.body.removeChild(this.mask);
+            if (this.calcwidthonparent) {
+                this.el.nativeElement.parentElement.removeChild(this.mask);
+            }
+            else {
+                document.body.removeChild(this.mask);
+            }
             this.domHandler.removeClass(document.body, 'ui-overflow-hidden');
             this.mask = null;
         }
