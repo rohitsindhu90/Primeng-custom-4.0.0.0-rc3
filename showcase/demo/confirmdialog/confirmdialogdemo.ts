@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ConfirmationService} from '../../../components/common/api';
 import {Message} from '../../../components/common/api';
-
+import { ConfirmationDialogControl } from '../../../components/common/api';
 @Component({
     templateUrl: 'showcase/demo/confirmdialog/confirmdialogdemo.html',
     providers: [ConfirmationService]
@@ -12,12 +12,15 @@ export class ConfirmDialogDemo {
 
     constructor(private confirmationService: ConfirmationService) {}
 
+    controls:ConfirmationDialogControl={multiselect:false,controls:[{value:"M",text:"test"},{value:"F",text:"test1"}]};
+
     confirm1() {
         this.confirmationService.confirm({
-            message: 'Are you sure that you want to perform this action?',
+            message: undefined,
             header: 'Confirmation',
-            icon: 'fa fa-question-circle',
+            control:this.controls,
             accept: (param:any) => {
+              debugger;
               alert(param);
                 this.msgs = [];
                 this.msgs.push({severity:'info', summary:'Confirmed', detail:'You have accepted'});

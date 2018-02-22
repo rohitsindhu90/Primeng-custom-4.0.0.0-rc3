@@ -4,6 +4,18 @@ import {Observable} from 'rxjs/Observable';
 
 export {DomHandler} from '../dom/domhandler';
 
+
+export class DialogControl{
+  public value:any;
+  public text:string;
+}
+
+export class ConfirmationDialogControl{
+public multiselect:boolean;
+public controls:DialogControl[];
+
+}
+
 export interface SortMeta {
     field: string;
     order: number;
@@ -76,6 +88,7 @@ export interface Confirmation {
     reject?: Function;
     acceptVisible?: boolean;
     rejectVisible?: boolean;
+    control?:ConfirmationDialogControl;
     acceptEvent?: EventEmitter<any>;
     rejectEvent?: EventEmitter<any>;
 }
@@ -113,17 +126,17 @@ export interface TreeNodeDragEvent {
 
 @Injectable()
 export class TreeDragDropService {
-    
+
     private dragStartSource = new Subject<TreeNodeDragEvent>();
     private dragStopSource = new Subject<TreeNodeDragEvent>();
-    
+
     dragStart$ = this.dragStartSource.asObservable();
     dragStop$ = this.dragStopSource.asObservable();
-    
+
     startDrag(event: TreeNodeDragEvent) {
         this.dragStartSource.next(event);
     }
-    
+
     stopDrag(event: TreeNodeDragEvent) {
         this.dragStopSource.next(event);
     }

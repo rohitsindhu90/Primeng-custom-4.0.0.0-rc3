@@ -19,6 +19,6 @@ export class CheckboxDemo {
     selectedCities: string[] = [];
 
     selectedCategories: string[] = ['Technology', 'Sports'];
-    
+
     checked: boolean = false;
 }

@@ -312,6 +312,8 @@ export class TemplateLoader implements OnInit, OnDestroy {
 	}
 }
 
+
+
 @NgModule({
     imports: [CommonModule],
     exports: [Header,Footer,Column,TemplateWrapper,ColumnHeaderTemplateLoader,ColumnBodyTemplateLoader,ColumnFooterTemplateLoader,ColumnFilterTemplateLoader,PrimeTemplate,TemplateLoader,Row,HeaderColumnGroup,FooterColumnGroup,ColumnEditorTemplateLoader],

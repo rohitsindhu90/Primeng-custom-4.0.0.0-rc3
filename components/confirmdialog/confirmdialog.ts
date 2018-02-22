@@ -1,9 +1,13 @@
 import { NgModule, Component, ElementRef, AfterViewInit, OnDestroy, Input, Output, AfterViewChecked, EventEmitter, Renderer2, ContentChild, NgZone } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'
 import { DomHandler } from '../dom/domhandler';
 import { Header, Footer, SharedModule } from '../common/shared';
+import {ConfirmationDialogControl} from '../common/api';
 import { ButtonModule } from '../button/button';
+import { RadioButtonModule } from '../radiobutton/radiobutton';
+import { CheckboxModule } from '../checkbox/checkbox';
 import { ConfirmationService, Confirmation } from '../common/api';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -21,6 +25,12 @@ import { Subscription } from 'rxjs/Subscription';
             <div class="ui-dialog-content ui-widget-content">
                 <i [ngClass]="'fa'" [class]="icon" *ngIf="icon"></i>
                 <span class="ui-confirmdialog-message" [innerHTML]="message"></span>
+                <ng-template *ngIf="confirmation?.control" ngFor let-c [ngForOf]="confirmation?.control.controls" let-i="index">
+                <div class="ui-g-12">
+                <p-radioButton *ngIf="!confirmation?.control.multiselect" name="modalradio" [value]="c.value" [label]="c.text" [(ngModel)]="controlsSelectedValue"></p-radioButton>
+                <p-checkbox *ngIf="confirmation?.control.multiselect" [name]="i" [value]="c.value" [label]="c.text" [(ngModel)]="controlsSelectedValue"></p-checkbox>
+                </div>
+                </ng-template>
             </div>
             <div class="ui-dialog-footer ui-widget-content" *ngIf="footer">
                 <ng-content select="p-footer"></ng-content>
@@ -83,6 +93,8 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
 
     @Input() calcwidthonparent: boolean;
 
+    // @Input() controls:ComfirmationDialogControl[];
+
     @ContentChild(Footer) footer;
 
     confirmation: Confirmation;
@@ -103,6 +115,10 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
 
     executePostShowActions: boolean;
 
+    controlsSelectedValue: any;
+
+
+
     constructor(public el: ElementRef, public domHandler: DomHandler,
         public renderer: Renderer2, private confirmationService: ConfirmationService, public zone: NgZone) {
         this.subscription = confirmationService.requireConfirmation$.subscribe(confirmation => {
@@ -113,6 +129,11 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
                 this.header = this.confirmation.header || this.header;
                 this.rejectVisible = this.confirmation.rejectVisible == null ? this.rejectVisible : this.confirmation.rejectVisible;
                 this.acceptVisible = this.confirmation.acceptVisible == null ? this.acceptVisible : this.confirmation.acceptVisible;
+
+                if(this.confirmation && this.confirmation.control){
+                  let multiselect=this.confirmation.control.multiselect;
+                  this.controlsSelectedValue=multiselect?[]:undefined;
+                }
 
                 if (this.confirmation.accept) {
                     this.confirmation.acceptEvent = new EventEmitter();
@@ -310,6 +331,9 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
 
     accept(param: any) {
         if (this.confirmation.acceptEvent) {
+            if (this.confirmation.control) {
+                param = this.controlsSelectedValue;
+            }
             this.confirmation.acceptEvent.emit(param);
         }
 
@@ -328,8 +352,8 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
 }
 
 @NgModule({
-    imports: [CommonModule, ButtonModule],
-    exports: [ConfirmDialog, ButtonModule, SharedModule],
+    imports: [CommonModule, ButtonModule, RadioButtonModule, CheckboxModule, FormsModule],
+    exports: [ConfirmDialog, ButtonModule, RadioButtonModule, CheckboxModule],
     declarations: [ConfirmDialog]
 })
 export class ConfirmDialogModule { }
