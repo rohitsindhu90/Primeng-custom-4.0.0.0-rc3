@@ -89,8 +89,17 @@ export class DomHandler {
         element.style.left = left + 'px';
     }
 
-    public absolutePosition(element: any, target: any): void {
+    public absolutePosition(element: any, target: any, adjustmentwidth?: string, maxwidth?: number): void {
+        if (adjustmentwidth) {
+            element.style.width = adjustmentwidth;
+        }
         let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
+
+        if (maxwidth > 0 && Number(elementDimensions.width) > maxwidth){
+            element.style.width = maxwidth + 'px';
+            elementDimensions= element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
+        }
+
         let elementOuterHeight = elementDimensions.height;
         let elementOuterWidth = elementDimensions.width;
         let targetOuterHeight = target.offsetHeight;
@@ -100,7 +109,11 @@ export class DomHandler {
         let windowScrollLeft = this.getWindowScrollLeft();
         let viewport = this.getViewport();
         let top, left;
-
+        //adjustment for autocomplete for mobile view when percentage width is less than the input width
+        if (adjustmentwidth && targetOuterWidth > elementOuterWidth) {
+            elementOuterWidth = targetOuterWidth;
+            element.style.width = targetOuterWidth + 'px';
+        }
         if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height) {
             top = targetOffset.top + windowScrollTop - elementOuterHeight;
             if (top < 0) {

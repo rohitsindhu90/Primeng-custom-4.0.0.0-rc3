@@ -144,7 +144,7 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
                     this.confirmation.rejectEvent = new EventEmitter();
                     this.confirmation.rejectEvent.subscribe(this.confirmation.reject);
                 }
-
+                this.positionInitialized=false;
                 this.visible = true;
             }
         });

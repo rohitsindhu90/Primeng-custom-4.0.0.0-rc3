@@ -8,12 +8,12 @@
     </div>
 </div>
 
-<div class="content-section implementation">
+<!-- <div class="content-section implementation">
 
 
-    <p-dataTable #dt [value]="cars" scrollable="true" scrollHeight="200px" scrollWidth="100%" [style]="{'margin-top':'30px'}">
+    <p-dataTable #dt [value]="cars" scrollable="true" [responsive]="true" scrollHeight="200px" scrollWidth="100%" [style]="{'margin-top':'30px'}">
         <p-header>Vertical and Horizontal</p-header>
-        <p-column field="vin" header="Vin" [style]="{'width':'250px'}"></p-column>
+        <p-column field="vin" header="Vin" ></p-column>
         <p-column field="year" header="Year" [style]="{'width':'250px'}"></p-column>
         <p-column field="brand" header="Brand" [style]="{'width':'250px','overflow':'visible'}">
           <ng-template pTemplate="filter" let-col>
@@ -28,7 +28,7 @@
         <p-column field="color" header="Color" [style]="{'width':'1050px'}"></p-column>
     </p-dataTable>
 
-   <p-dataTable [value]="cars" scrollable="true" scrollHeight="200px" [responsive]="true" frozenWidth="200px" unfrozenWidth="100%" [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" [style]="{'margin-top':'30px'}">
+   <p-dataTable [value]="cars" scrollable="true" [responsive]="true" scrollHeight="200px" [responsive]="true" frozenWidth="200px" unfrozenWidth="100%" [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" [style]="{'margin-top':'30px'}">
         <p-header>Frozen Columns</p-header>
         <p-column field="vin" header="Vin" [style]="{'width':'200px'}" frozen="true" filter="true"></p-column>
         <p-column field="year" header="Year" [style]="{'width':'250px'}"></p-column>
@@ -41,9 +41,9 @@
           </ng-template></p-column>
         <p-column field="color" header="Color" [style]="{'width':'250px'}"></p-column>
     </p-dataTable>
-</div>
+</div> -->
 
-<p-dataTable [value]="cars" scrollable="true" scrollHeight="200px" scrollWidth="100%">
+<p-dataTable [value]="cars" scrollable="true" [responsive]="true" scrollHeight="200px" scrollWidth="100%">
    <p-header>Vertical</p-header>
    <p-column field="vin" header="Vin"></p-column>
    <p-column field="year" header="Year"></p-column>

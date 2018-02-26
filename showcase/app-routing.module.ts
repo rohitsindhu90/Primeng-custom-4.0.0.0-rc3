@@ -26,6 +26,11 @@ import {HomePageComponent} from './homepage.component';
                 resolve(require('./demo/autocomplete/autocompletedemo.module')['AutoCompleteDemoModule']);
               });
             })},
+            {path: 'autocomplete-extended', loadChildren: () => new Promise(function (resolve) {
+              (require as any).ensure([], function (require: any) {
+                resolve(require('./demo/autocompleteextended/autocompletedemo.module')['AutoCompleteExtendedDemoModule']);
+              });
+            })},
             {path: 'blockui', loadChildren: () => new Promise(function (resolve) {
               (require as any).ensure([], function (require: any) {
                 resolve(require('./demo/blockui/blockuidemo.module')['BlockUIDemoModule']);

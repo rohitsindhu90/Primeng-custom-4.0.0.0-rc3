@@ -15,6 +15,7 @@
         </a>
         <div [ngClass]="{submenushow: (inputmenutitle.id == activeMenuId), 'submenuhide': (inputmenutitle.id != activeMenuId)}">
             <a [routerLink]="['/autocomplete']" (click)="mobileMenuActive = false">&#9679; AutoComplete</a>
+            <a [routerLink]="['/autocomplete-extended']" (click)="mobileMenuActive = false">&#9679; AutoComplete Extended</a>
             <a [routerLink]="['/calendar']" (click)="mobileMenuActive = false">&#9679; Calendar</a>
             <a [routerLink]="['/checkbox']" (click)="mobileMenuActive = false">&#9679; Checkbox</a>
             <a [routerLink]="['/chips']" (click)="mobileMenuActive = false">&#9679; Chips</a>

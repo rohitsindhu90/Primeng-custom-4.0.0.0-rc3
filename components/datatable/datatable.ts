@@ -237,9 +237,9 @@ export class TableBody {
 <div #scrollBody class="ui-datatable-scrollable-body" [ngStyle]="{'width': width,'max-height':dt.scrollHeight}">
 <div #scrollTableWrapper style="position:relative" [ngStyle]="{'height':virtualTableHeight}">
     <table #scrollTable [class]="dt.tableStyleClass" [ngStyle]="dt.tableStyle" [ngClass]="{'ui-datatable-virtual-table':virtualScroll}" style="top:0px">
-        <colgroup class="ui-datatable-scrollable-colgroup">
-            <col *ngFor="let col of dt.visibleColumns()" />
-        </colgroup>
+    <!--<colgroup class="ui-datatable-scrollable-colgroup">
+         <col *ngFor="let col of dt.visibleColumns()" />
+    </colgroup>-->
         <tbody [ngClass]="{'ui-datatable-data ui-widget-content': true, 'ui-datatable-hoverable-rows': (dt.rowHover||dt.selectionMode)}" [pTableBody]="columns"></tbody>
     </table>
 </div>
@@ -1024,12 +1024,12 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
 
     emptyMessageAlignment() {
         let unfrozenclass = "";
-        let frozenWidth:number = 0;
-        if (this.unfrozenWidth && this.frozenWidth && parseInt(this.frozenWidth)>0) {
+        let frozenWidth: number = 0;
+        if (this.unfrozenWidth && this.frozenWidth && parseInt(this.frozenWidth) > 0) {
             unfrozenclass = ".ui-datatable-unfrozen-view";
 
             if (document.querySelectorAll('.ui-datatable-unfrozen-view table tr th.col-group-header')[0])
-                frozenWidth = parseInt(this.frozenWidth) - (parseInt(this.frozenWidth)-150)
+                frozenWidth = parseInt(this.frozenWidth) - (parseInt(this.frozenWidth) - 150)
         }
 
         if (this.isEmpty()) {
@@ -2447,7 +2447,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                     };
                 }
                 else if (this.displaysum && R === (data.length - 1)) {
-                    cell.t='n';
+                    cell.t = 'n';
                     cell.s = {
                         font: {
 
@@ -2542,7 +2542,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                     cell.t = 'n';
                 else if (typeof cell.v === 'boolean')
                     cell.t = 'b';
-                else if (cell.t ==='n' && !isNaN(Number(cell.v)))
+                else if (cell.t === 'n' && !isNaN(Number(cell.v)))
                     cell.t = 'n';
                 else
                     cell.t = 's';

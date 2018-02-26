@@ -5,15 +5,20 @@ import {Observable} from 'rxjs/Observable';
 export {DomHandler} from '../dom/domhandler';
 
 
-export class DialogControl{
-  public value:any;
-  public text:string;
+export interface DialogControl{
+   value:any;
+   text:string;
 }
 
-export class ConfirmationDialogControl{
-public multiselect:boolean;
-public controls:DialogControl[];
+export interface ConfirmationDialogControl{
+ multiselect:boolean;
+ controls:DialogControl[];
 
+}
+
+export interface AutoCompleteHeaderColumnMeta{
+  field: string;
+  header: string;
 }
 
 export interface SortMeta {
