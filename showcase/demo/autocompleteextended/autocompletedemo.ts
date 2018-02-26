@@ -17,7 +17,7 @@ export class AutoCompleteExtendedDemo {
 
     filteredCountriesMultiple: any[];
 
-    metedata:AutoCompleteHeaderColumnMeta[]=[{field:'name',header:'Name'},{field:'code',header:'Code'}];
+    metedata:AutoCompleteHeaderColumnMeta[]=[{field:'name',header:'Name',width:'90%'},{field:'code',header:'Code'}];
 
     brands: string[] = ['Audi','BMW','Fiat','Ford','Honda','Jaguar','Mercedes','Renault','Volvo','VW'];
 

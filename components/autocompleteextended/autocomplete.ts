@@ -44,7 +44,7 @@ export const AUTOCOMPLETEXTENDED_VALUE_ACCESSOR: any = {
                                    [scrollWidth]="searchContainerWidth"
                                    [scrollHeight]="scrollHeight"
                                    (onRowSelect)="selectItem($event.data)">
-                          <p-column *ngFor="let column of headermeta" [field]="column.field" [header]="column.header" [hidden]="column.hidden">
+                          <p-column *ngFor="let column of headermeta" [field]="column.field" [header]="column.header" [hidden]="column.hidden" [style]="{'width':column.width}">
                               </p-column>
                       </p-dataTable>
                 </div>
