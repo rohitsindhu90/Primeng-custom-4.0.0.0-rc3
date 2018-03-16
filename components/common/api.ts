@@ -13,7 +13,9 @@ export interface DialogControl{
 export interface ConfirmationDialogControl{
  multiselect:boolean;
  controls:DialogControl[];
-
+ rvalidation?:boolean;
+ errormsg?:string;
+ msgcss?:string;
 }
 
 export interface AutoCompleteHeaderColumnMeta{

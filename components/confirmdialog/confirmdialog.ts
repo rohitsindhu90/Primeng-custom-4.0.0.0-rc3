@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'
 import { DomHandler } from '../dom/domhandler';
 import { Header, Footer, SharedModule } from '../common/shared';
-import {ConfirmationDialogControl} from '../common/api';
+import { ConfirmationDialogControl } from '../common/api';
 import { ButtonModule } from '../button/button';
 import { RadioButtonModule } from '../radiobutton/radiobutton';
 import { CheckboxModule } from '../checkbox/checkbox';
@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
     template: `
         <div [ngClass]="{'ui-dialog ui-confirmdialog ui-widget ui-widget-content ui-corner-all ui-shadow':true,'ui-dialog-rtl':rtl}"
             [style.display]="visible ? 'block' : 'none'" [style.width.px]="width" [style.height.px]="height" (mousedown)="moveOnTop()" [@dialogState]="visible ? 'visible' : 'hidden'">
+
             <div class="ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top">
                 <span class="ui-dialog-title" *ngIf="header">{{header}}</span>
                 <a *ngIf="closable" [ngClass]="{'ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all':true}" href="#" role="button" (click)="close($event)">
@@ -25,6 +26,7 @@ import { Subscription } from 'rxjs/Subscription';
             <div class="ui-dialog-content ui-widget-content">
                 <i [ngClass]="'fa'" [class]="icon" *ngIf="icon"></i>
                 <span class="ui-confirmdialog-message" [innerHTML]="message"></span>
+                <span *ngIf="error" class="{{confirmation?.control.msgcss?confirmation?.control.msgcss:'ui-message ui-messages-error ui-corner-all'}}">{{error}}</span>
                 <ng-template *ngIf="confirmation?.control" ngFor let-c [ngForOf]="confirmation?.control.controls" let-i="index">
                 <div class="ui-g-12">
                 <p-radioButton *ngIf="!confirmation?.control.multiselect" name="modalradio" [value]="c.value" [label]="c.text" [(ngModel)]="controlsSelectedValue"></p-radioButton>
@@ -117,12 +119,13 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
 
     controlsSelectedValue: any;
 
-
+    error: string;
 
     constructor(public el: ElementRef, public domHandler: DomHandler,
         public renderer: Renderer2, private confirmationService: ConfirmationService, public zone: NgZone) {
         this.subscription = confirmationService.requireConfirmation$.subscribe(confirmation => {
             if (confirmation.key === this.key) {
+                this.error='';
                 this.confirmation = confirmation;
                 this.message = this.confirmation.message || this.message;
                 this.icon = this.confirmation.icon || this.icon;
@@ -130,9 +133,9 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
                 this.rejectVisible = this.confirmation.rejectVisible == null ? this.rejectVisible : this.confirmation.rejectVisible;
                 this.acceptVisible = this.confirmation.acceptVisible == null ? this.acceptVisible : this.confirmation.acceptVisible;
 
-                if(this.confirmation && this.confirmation.control){
-                  let multiselect=this.confirmation.control.multiselect;
-                  this.controlsSelectedValue=multiselect?[]:undefined;
+                if (this.confirmation && this.confirmation.control) {
+                    let multiselect = this.confirmation.control.multiselect;
+                    this.controlsSelectedValue = multiselect ? [] : undefined;
                 }
 
                 if (this.confirmation.accept) {
@@ -144,7 +147,7 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
                     this.confirmation.rejectEvent = new EventEmitter();
                     this.confirmation.rejectEvent.subscribe(this.confirmation.reject);
                 }
-                this.positionInitialized=false;
+                this.positionInitialized = false;
                 this.visible = true;
             }
         });
@@ -160,7 +163,8 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
         if (this._visible) {
             if (!this.positionInitialized) {
                 this.center();
-                this.positionInitialized = true;
+                // setTimeout(()=>{this.center()},2000);
+                // this.positionInitialized = true;
             }
 
             this.el.nativeElement.children[0].style.zIndex = ++DomHandler.zindex;
@@ -194,8 +198,12 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
             else {
                 this.domHandler.findSingle(this.el.nativeElement.children[0], 'button').focus();
             }
+            setTimeout(() => {
+                this.center();
+            },100);
             this.executePostShowActions = false;
         }
+
     }
 
     center() {
@@ -330,15 +338,23 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
     }
 
     accept(param: any) {
+        this.error =undefined;
         if (this.confirmation.acceptEvent) {
             if (this.confirmation.control) {
                 param = this.controlsSelectedValue;
-            }
-            this.confirmation.acceptEvent.emit(param);
-        }
+                if (this.confirmation.control.rvalidation && (!param || param == null || param.length == 0)) {
+                    this.error = this.confirmation.control.errormsg || 'Please Select atleast one value';
 
-        this.hide();
-        this.confirmation = null;
+                }
+            }
+            if (!this.error) {
+                this.confirmation.acceptEvent.emit(param);
+            }
+        }
+        if (!this.error) {
+            this.hide();
+            this.confirmation = null;
+        }
     }
 
     reject() {

@@ -13,22 +13,22 @@ import {BlockableUI} from '../common/api';
     providers: [DomHandler]
 })
 export class BlockUI implements AfterViewInit,OnDestroy {
-
+   debugger;
     @Input() target: any;
-    
+
     @ViewChild('mask') mask: ElementRef;
-    
+
     _blocked: boolean;
-        
+
     constructor(public el: ElementRef,public domHandler: DomHandler) {}
-    
+
     @Input() get blocked(): boolean {
         return this._blocked;
     }
-    
+
     set blocked(val: boolean) {
         this._blocked = val;
-        
+
         if(this.mask.nativeElement) {
             if(this._blocked)
                 this.block();
@@ -36,13 +36,13 @@ export class BlockUI implements AfterViewInit,OnDestroy {
                 this.unblock();
         }
     }
-    
+
     ngAfterViewInit() {
         if(this.target && !this.target.getBlockableElement) {
             throw 'Target of BlockUI must implement BlockableUI interface';
         }
     }
-        
+
     block() {
         if(this.target) {
             this.target.getBlockableElement().appendChild(this.mask.nativeElement);
@@ -53,16 +53,16 @@ export class BlockUI implements AfterViewInit,OnDestroy {
         else {
             document.body.appendChild(this.mask.nativeElement);
         }
-        
+
         this.mask.nativeElement.style.zIndex = String(++DomHandler.zindex);
     }
-    
+
     unblock() {
         this.el.nativeElement.appendChild(this.mask.nativeElement);
     }
-    
+
     ngOnDestroy() {
-        
+
     }
 }
 

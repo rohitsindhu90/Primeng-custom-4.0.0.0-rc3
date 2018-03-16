@@ -6,7 +6,7 @@ import {DropdownDemoRoutingModule} from './dropdowndemo-routing.module';
 import {DropdownModule} from '../../../components/dropdown/dropdown';
 import {TabViewModule} from '../../../components/tabview/tabview';
 import {CodeHighlighterModule} from '../../../components/codehighlighter/codehighlighter';
-
+import {BlockUIModule } from  '../../../components/blockui/blockui';
 @NgModule({
 	imports: [
 		CommonModule,
@@ -14,7 +14,8 @@ import {CodeHighlighterModule} from '../../../components/codehighlighter/codehig
 		DropdownDemoRoutingModule,
         DropdownModule,
         TabViewModule,
-        CodeHighlighterModule
+        CodeHighlighterModule,
+				BlockUIModule
 	],
 	declarations: [
 		DropdownDemo
