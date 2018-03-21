@@ -86,7 +86,9 @@ export class AutoCompleteExtended implements AfterViewInit, AfterViewChecked, Do
 
     @Input() size: number;
 
-    appendTo: any = "body";
+    appendTo: any ="body";
+
+
 
     @Input() autoHighlight: boolean;
 
@@ -137,7 +139,8 @@ export class AutoCompleteExtended implements AfterViewInit, AfterViewChecked, Do
 
     @Input() immutable: boolean = true;
 
-
+    @Input() appendToTagName:string;
+    @Input() containerWidthClass:string;
     @ViewChild('in') inputEL: ElementRef;
 
     @ViewChild('multiIn') multiInputEL: ElementRef;
@@ -189,6 +192,7 @@ export class AutoCompleteExtended implements AfterViewInit, AfterViewChecked, Do
     inputFieldValue: string = null;
 
     loading: boolean;
+
 
     constructor(public el: ElementRef, public domHandler: DomHandler, public renderer: Renderer2, public objectUtils: ObjectUtils, public cd: ChangeDetectorRef, public differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
@@ -284,6 +288,12 @@ export class AutoCompleteExtended implements AfterViewInit, AfterViewChecked, Do
     }
 
     ngAfterViewInit() {
+        if(this.appendToTagName){
+          let ele=document.getElementsByTagName(this.appendToTagName)[0];
+          if(ele){
+            this.appendTo=ele;
+          }
+        }
         if (this.appendTo) {
             if (this.appendTo === 'body')
                 document.body.appendChild(this.panelEL.nativeElement);
@@ -414,7 +424,7 @@ export class AutoCompleteExtended implements AfterViewInit, AfterViewChecked, Do
 
     align() {
         if (this.appendTo)
-            this.domHandler.absolutePosition(this.panelEL.nativeElement, (this.multiple ? this.multiContainerEL.nativeElement : this.inputEL.nativeElement), this.searchContainerWidth, this.maxwidth);
+            this.domHandler.absolutePosition(this.panelEL.nativeElement, (this.multiple ? this.multiContainerEL.nativeElement : this.inputEL.nativeElement), this.searchContainerWidth, this.maxwidth,this.containerWidthClass);
         else
 
             this.domHandler.relativePosition(this.panelEL.nativeElement, (this.multiple ? this.multiContainerEL.nativeElement : this.inputEL.nativeElement));

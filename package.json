@@ -1,6 +1,6 @@
 {
   "name": "primeng-dev-ng4",
-  "version": "4.0.5",
+  "version": "4.0.5-RC5",
   "scripts": {
     "tsc": "tsc",
     "tsc:w": "tsc -w",
@@ -29,6 +29,7 @@
     "@angular/platform-server": "4.0.0",
     "@angular/router": "4.0.0",
     "@angular/upgrade": "4.0.0",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.23",
     "@types/file-saver": "0.0.0",
     "@types/lodash": "^4.14.53",
     "core-js": "2.4.1",

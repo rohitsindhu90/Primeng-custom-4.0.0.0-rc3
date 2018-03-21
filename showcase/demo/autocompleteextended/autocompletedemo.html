@@ -7,7 +7,7 @@
 
 <div class="content-section implementation">
 
-    <p-autoComplete-extended [(ngModel)]="country" [suggestions]="filteredCountriesSingle" [headermeta]='metedata' searchContainerWidth="60%" maxwidth='500' (completeMethod)="filterCountrySingle($event)" field="name" [size]="30"
+    <p-autoComplete-extended [(ngModel)]="country" appendToClass="content-section implementation" [suggestions]="filteredCountriesSingle" [headermeta]='metedata' searchContainerWidth="60%" maxwidth='500' (completeMethod)="filterCountrySingle($event)" field="name" [size]="30"
         placeholder="Countries" [minLength]="1" forceSelection="true" [minLength]="4" (onSelect)="handleSelectClick($event)" (onClearMobile)="console.log('clear')"></p-autoComplete-extended>
 
 </div>

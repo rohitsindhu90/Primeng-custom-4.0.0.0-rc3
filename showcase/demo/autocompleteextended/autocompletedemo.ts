@@ -40,8 +40,7 @@ export class AutoCompleteExtendedDemo {
     filterCountrySingle(event) {
         let query = event.query;
         this.countryService.getCountries().then(countries => {
-          debugger;
-            this.filteredCountriesSingle = this.filterCountry(query, countries);
+          this.filteredCountriesSingle = this.filterCountry(query, countries);
         });
 
 

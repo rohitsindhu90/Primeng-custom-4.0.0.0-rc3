@@ -5,19 +5,34 @@
     </div>
 </div>
 
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Modal title</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p-autoComplete-extended [(ngModel)]="country" appendToTagName="ngb-modal-window" containerWidthClass="modal-body" [suggestions]="filteredCountriesSingle" [headermeta]='metedata' searchContainerWidth="60%" maxwidth='500' (completeMethod)="filterCountrySingle($event)" field="name" [size]="30"
+        placeholder="Countries" [minLength]="1" forceSelection="true" [minLength]="4" (onSelect)="handleSelectClick($event)" (onClearMobile)="console.log('clear')"></p-autoComplete-extended>
+    <p>One fine body&hellip;</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
+
+<hr>
+
+<pre>{{closeResult}}</pre>
+
 <div class="content-section implementation">
     <p-dialog header="Godfather I" [(visible)]="display" modal="modal" responsive="true" calcwidthonparent="true">
-        <span>The story begins as Don Vito Corleone, the head of a New York Mafia family, oversees his daughter's wedding.
-           His beloved son Michael has just come home from the war, but does not intend to become part of his father's business.
-           Through Michael's life the nature of the family business becomes clear. The business of the family is just like the head of the family,
-           kind and benevolent to those who give respect,
-           but given to ruthless violence whenever anything stands against the good of the family.</span>
-        <p-footer>
-            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                <button type="button" pButton icon="fa-close" (click)="display=false" label="No"></button>
-                <button type="button" pButton icon="fa-check" (click)="display=false" label="Yes"></button>
-            </div>
-        </p-footer>
+      <p-autoComplete-extended [(ngModel)]="country" [suggestions]="filteredCountriesSingle" [headermeta]='metedata' searchContainerWidth="60%" maxwidth='500' (completeMethod)="filterCountrySingle($event)" field="name" [size]="30"
+          placeholder="Countries" [minLength]="1" forceSelection="true" [minLength]="4" (onSelect)="handleSelectClick($event)" (onClearMobile)="console.log('clear')"></p-autoComplete-extended>
+
     </p-dialog>
 
     <button type="text" (click)="showDialog()" pButton icon="fa-external-link-square" label="Show"></button>

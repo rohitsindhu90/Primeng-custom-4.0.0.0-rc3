@@ -89,7 +89,13 @@ export class DomHandler {
         element.style.left = left + 'px';
     }
 
-    public absolutePosition(element: any, target: any, adjustmentwidth?: string, maxwidth?: number): void {
+    public absolutePosition(element: any, target: any, adjustmentwidth?: string, maxwidth?: number,containerWidthClass?:string): void {
+        if(containerWidthClass){
+          let ele=document.getElementsByClassName(containerWidthClass)[0];
+          if(ele.clientWidth < maxwidth){
+            maxwidth=(ele.clientWidth-50);
+          }
+        }
         if (adjustmentwidth) {
             element.style.width = adjustmentwidth;
         }
