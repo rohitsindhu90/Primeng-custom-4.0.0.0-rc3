@@ -1,4 +1,4 @@
-import { NgModule, Component, ViewChild, ElementRef, AfterViewInit, AfterContentInit, DoCheck, AfterViewChecked, Input, Output, EventEmitter, ContentChildren, QueryList, TemplateRef, Renderer2, forwardRef, ChangeDetectorRef, IterableDiffers, HostListener } from '@angular/core';
+﻿import { NgModule, Component, ViewChild, ElementRef, AfterViewInit, AfterContentInit, DoCheck, AfterViewChecked, Input, Output, EventEmitter, ContentChildren, QueryList, TemplateRef, Renderer2, forwardRef, ChangeDetectorRef, IterableDiffers, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from '../inputtext/inputtext';
 import { DataTableModule } from '../datatable/datatable';
@@ -166,6 +166,7 @@ export class AutoCompleteExtended implements AfterViewInit, AfterViewChecked, Do
     timeout: any;
 
     panelVisible: boolean = false;
+
 
     documentClickListener: any;
 
@@ -416,17 +417,21 @@ export class AutoCompleteExtended implements AfterViewInit, AfterViewChecked, Do
             if (!this.panelVisible && hasFocus) {
                 this.panelVisible = true;
                 this.panelEL.nativeElement.style.zIndex = ++DomHandler.zindex;
-                this.domHandler.fadeIn(this.panelEL.nativeElement, 200);
+                this.panelEL.nativeElement.style.opacity = 0;
+                // this.domHandler.fadeIn(this.panelEL.nativeElement, 200);
                 this.bindDocumentClickListener();
+
             }
         }
     }
 
     align() {
         if (this.appendTo)
+        {
             this.domHandler.absolutePosition(this.panelEL.nativeElement, (this.multiple ? this.multiContainerEL.nativeElement : this.inputEL.nativeElement), this.searchContainerWidth, this.maxwidth,this.containerWidthClass);
+            this.domHandler.fadeIn(this.panelEL.nativeElement, 200);
+          }
         else
-
             this.domHandler.relativePosition(this.panelEL.nativeElement, (this.multiple ? this.multiContainerEL.nativeElement : this.inputEL.nativeElement));
     }
 
