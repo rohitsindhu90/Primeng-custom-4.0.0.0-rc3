@@ -8,7 +8,7 @@
 </div>
 
 <div class="content-section implementation">
-  <form>
+
   <p-dataTable #dt [value]="cars" exportFilename="cars" [(selection)]="selectedCars" selectionMode="multiple" [metaKeySelection]="false">
           <p-header>
               <div class="ui-helper-clearfix">
@@ -18,10 +18,14 @@
           </p-header>
           <!-- <p-column field="vin" header="Vin"></p-column> -->
           <p-column field="year" header="Year"></p-column>
-          <!-- <p-column field="brand" header="Brand"></p-column> -->
+          <p-column field="html" header="HTML">
+            <ng-template let-col let-cc="rowData" pTemplate="body">
+               <span style="white-space: pre-line" [innerHTML]="cc[col.field]"></span>
+           </ng-template>
+          </p-column>
           <!-- <p-column field="color" header="Color"></p-column> -->
       </p-dataTable>
-    </form>
+
     <p-dataTable #dt1 id="grid-call-class" class="ui-datatable-scroll-margin-fix"
                     [value]="cc"
                     [rows]="10"

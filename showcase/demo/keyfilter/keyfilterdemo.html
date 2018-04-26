@@ -32,6 +32,12 @@
         <div class="ui-g-12 ui-md-4">
             <input type="text" pInputText [pKeyFilter]="blockSpace" placeholder="Block space key">
         </div>
+        <div class="ui-g-12 ui-md-4">
+            <form #form1="ngForm">
+            <input type="text" name="cc" [(ngModel)]="cc" pInputText [pKeyFilter]="multipleEmailAddress" [pValidateOnly]="true" placeholder="Multiple Email Validation">
+            <p-messages severity="error" text="Not a valid number" [@errorState]="form1.dirty && !form1.valid ? 'visible' : 'hidden'"></p-messages>
+          </form>
+        </div>
     </div>
 
     <h3>Validation Mode</h3>

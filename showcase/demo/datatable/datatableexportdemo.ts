@@ -7,7 +7,7 @@ import {CarService} from '../service/carservice';
 })
 export class DataTableExportDemo implements OnInit {
 
-    cars: Car[];
+    cars: any[];
     cc: any[]=[];
     constructor(private carService: CarService) { }
 

@@ -1,4 +1,4 @@
-﻿import {
+import {
     NgModule, Component, ElementRef, AfterContentInit, AfterViewInit, AfterViewChecked, OnInit, OnDestroy, DoCheck, Input, ViewContainerRef, ViewChild,
     Output, SimpleChange, EventEmitter, ContentChild, ContentChildren, Renderer, IterableDiffers, QueryList, TemplateRef, ChangeDetectorRef, Inject, forwardRef, NgZone
 } from '@angular/core';
@@ -796,7 +796,10 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         }
         if (this.calculateRowHeight && this.dataToRender && this.dataToRender.length > 0) {
             //resize row height based on unfrozen columns
-            this.initFrozenRows();
+            setTimeout(() => {
+                this.initFrozenRows();
+            }, 1000);
+
         }
         this.emptyMessageAlignment();
     }
@@ -849,8 +852,11 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
     initFrozenRows() {
         if (this.unfrozenWidth) {
             //getting scroll height
-
+            // let rowcount=this.rows;
+            // let renderedRowCount=document.querySelectorAll('.ui-datatable-unfrozen-view .ui-datatable-scrollable-body table tr').length;
+            // if(rowcount==renderedRowCount){
             this.calculateRowHeight = false;
+            // }
             let unfrozenRows = document.querySelectorAll('.ui-datatable-unfrozen-view .ui-datatable-scrollable-body table tr');
             let frozenRows = document.querySelectorAll('.ui-datatable-frozen-view .ui-datatable-scrollable-body table tr');
 
@@ -2443,6 +2449,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                                     rgb: "000000"
                                 }
                             }
+
                         }
                     };
                 }
@@ -2482,6 +2489,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                                     rgb: "000000"
                                 }
                             }
+
                         }
                     };
                 }
@@ -2510,9 +2518,37 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                                     rgb: "000000"
                                 }
                             }
+
+
                         }
                     };
 
+                }
+                else if (cell.v && cell.v.toString().toLowerCase().indexOf('\n') !== -1) {
+                    cell.s = {
+                        alignment: {
+                            wrapText: true
+                        },
+                        border:
+                        {
+                            left: {
+                                style: 'thin',
+                                color: {
+                                    rgb: "000000"
+                                }
+                            },
+                            right:
+                            {
+                                style: 'thin',
+                                color:
+                                {
+                                    rgb: "000000"
+                                }
+                            }
+
+
+                        }
+                    };
                 }
                 else {
                     cell.s = {
@@ -2532,9 +2568,12 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                                     rgb: "000000"
                                 }
                             }
+
+
                         }
                     };
                 }
+
                 //convert null value to empty string
                 if (cell.v == null) cell.v = " ";
                 var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
