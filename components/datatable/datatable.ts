@@ -796,10 +796,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         }
         if (this.calculateRowHeight && this.dataToRender && this.dataToRender.length > 0) {
             //resize row height based on unfrozen columns
-            setTimeout(() => {
                 this.initFrozenRows();
-            }, 1000);
-
         }
         this.emptyMessageAlignment();
     }
