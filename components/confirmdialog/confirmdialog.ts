@@ -341,8 +341,8 @@ export class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy
         this.error =undefined;
         if (this.confirmation.acceptEvent) {
             if (this.confirmation.control) {
-                param = this.controlsSelectedValue;
-                if (this.confirmation.control.rvalidation && (!param || param == null || param.length == 0)) {
+				param = this.controlsSelectedValue;
+                if (this.confirmation.control.rvalidation && (param==undefined || param == null || param.length == 0)) {
                     this.error = this.confirmation.control.errormsg || 'Please Select atleast one value';
 
                 }

@@ -796,7 +796,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         }
         if (this.calculateRowHeight && this.dataToRender && this.dataToRender.length > 0) {
             //resize row height based on unfrozen columns
-                this.initFrozenRows();
+            this.initFrozenRows();
         }
         this.emptyMessageAlignment();
     }
@@ -2494,6 +2494,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                     cell.s = {
                         border:
                         {
+
                             bottom:
                             {
                                 style: 'thin',
@@ -2501,7 +2502,12 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                                     rgb: "000000"
                                 }
                             },
-                            left: {
+                            top: {
+                                style: 'thin',
+                                color: {
+                                    rgb: "000000"
+                                }
+                            }, left: {
                                 style: 'thin',
                                 color: {
                                     rgb: "000000"
@@ -2528,7 +2534,19 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                         },
                         border:
                         {
-                            left: {
+                            bottom:
+                            {
+                                style: 'thin',
+                                color: {
+                                    rgb: "000000"
+                                }
+                            },
+                            top: {
+                                style: 'thin',
+                                color: {
+                                    rgb: "000000"
+                                }
+                            }, left: {
                                 style: 'thin',
                                 color: {
                                     rgb: "000000"
@@ -2551,7 +2569,19 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                     cell.s = {
                         border:
                         {
-                            left: {
+                            bottom:
+                            {
+                                style: 'thin',
+                                color: {
+                                    rgb: "000000"
+                                }
+                            },
+                            top: {
+                                style: 'thin',
+                                color: {
+                                    rgb: "000000"
+                                }
+                            }, left: {
                                 style: 'thin',
                                 color: {
                                     rgb: "000000"

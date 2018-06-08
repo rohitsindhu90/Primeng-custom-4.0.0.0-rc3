@@ -19,7 +19,7 @@ export class ConfirmDialogDemo {
         let popupSecondOptionMessage = 'Would you like to assign the asset to Manish Mishra and keep the Mobile number 09810182190 assigned to the existing user Rohit ';
 
         let controls: ConfirmationDialogControl = {
-            multiselect: true,rvalidation:true,msgcss:"test-error", controls: [
+            multiselect: false,rvalidation:true,msgcss:"test-error", controls: [
                 { value: true, text: popupFirstOptionMessage },
                 { value: false, text: popupSecondOptionMessage }
             ]
