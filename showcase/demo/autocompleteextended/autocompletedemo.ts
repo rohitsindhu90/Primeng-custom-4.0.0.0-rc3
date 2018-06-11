@@ -33,6 +33,7 @@ export class AutoCompleteExtendedDemo {
           });
     }
     handleSelectClick(event:any){
+        debugger;
         console.log(event);
 
     }

@@ -1,4 +1,4 @@
-﻿import { NgModule, Component, ViewChild, ElementRef, AfterViewInit, AfterContentInit, DoCheck, AfterViewChecked, Input, Output, EventEmitter, ContentChildren, QueryList, TemplateRef, Renderer2, forwardRef, ChangeDetectorRef, IterableDiffers, HostListener } from '@angular/core';
+import { NgModule, Component, ViewChild, ElementRef, AfterViewInit, AfterContentInit, DoCheck, AfterViewChecked, Input, Output, EventEmitter, ContentChildren, QueryList, TemplateRef, Renderer2, forwardRef, ChangeDetectorRef, IterableDiffers, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from '../inputtext/inputtext';
 import { DataTableModule } from '../datatable/datatable';
@@ -404,11 +404,13 @@ export class AutoCompleteExtended implements AfterViewInit, AfterViewChecked, Do
             this.inputEL.nativeElement.value = this.field ? this.objectUtils.resolveFieldData(option, this.field) || '' : option;
             this.value = option;
             this.onModelChange(this.value);
+
         }
-
         this.onSelect.emit(option);
-
         this.focusInput();
+        //custom code : resign unknown
+        //added to fix multiple click 
+        this.hide();
     }
 
     show() {
@@ -450,10 +452,10 @@ export class AutoCompleteExtended implements AfterViewInit, AfterViewChecked, Do
         else if (this.dropdownMode === 'current')
             this.search(event, queryValue);
 
-        this.onDropdownClick.emit({
-            originalEvent: event,
-            query: queryValue
-        });
+        // this.onDropdownClick.emit({
+        //     originalEvent: event,
+        //     query: queryValue
+        // });
     }
 
     focusInput() {

@@ -10,8 +10,22 @@
     <p-autoComplete-extended [(ngModel)]="country" appendToClass="content-section implementation" [suggestions]="filteredCountriesSingle" [headermeta]='metedata' searchContainerWidth="60%" maxwidth='500' (completeMethod)="filterCountrySingle($event)" field="name" [size]="30"
         placeholder="Countries" [minLength]="1" forceSelection="true" [minLength]="4" (onSelect)="handleSelectClick($event)" (onClearMobile)="console.log('clear')"></p-autoComplete-extended>
 
-</div>
 
+
+
+</div>
+<div class="content-section implementation">
+  {{country|json}}
+  <p-autoComplete-extended [(ngModel)]="country" appendToClass="content-section implementation"  [suggestions]="filteredCountriesSingle" [headermeta]='metedata' [forceSelection]="true" searchContainerWidth="60%" maxwidth='500' (completeMethod)="filterCountrySingle($event)" field="name" [size]="30"
+      placeholder="Countries" [minLength]="1" [minLength]="4" (onSelect)="handleSelectClick($event)" [dropdown]="true">
+      <ng-template let-brand pTemplate="item">
+          <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+              <!-- <img src="assets/showcase/images/demo/car/{{brand}}.png" style="width:32px;display:inline-block;margin:5px 0 2px 5px"/> -->
+              <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{brand}}</div>
+          </div>
+      </ng-template>
+  </p-autoComplete-extended>
+</div>
 <div class="content-section documentation">
     <p-tabView effect="fade">
         <p-tabPanel header="Documentation">
