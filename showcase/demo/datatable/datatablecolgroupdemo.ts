@@ -6,8 +6,10 @@ import {Component,OnInit} from '@angular/core';
 export class DataTableColGroupDemo implements OnInit {
 
     sales: any[];
+    filters: { [s: string]: any; } = {};
 columnhide:boolean;
     ngOnInit() {
+      this.filters["brand"]={ value: "HTC", matchMode: "equals"}
       this.columnhide=true;
         this.sales = [
             {brand: 'Apple', lastYearSale: '51%', thisYearSale: '40%', lastYearProfit: '$54,406.00', thisYearProfit: '$43,342'},

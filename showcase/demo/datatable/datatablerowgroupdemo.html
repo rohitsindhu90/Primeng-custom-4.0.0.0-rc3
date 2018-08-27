@@ -7,16 +7,37 @@
         are toggleable groups and footer rows.</span>
     </div>
 </div>
-
+<div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+{{normalgrid}}
+    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+    <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+    <input type="button" value="Expand ALL" (click)="dt.toggleAllRowGroup($event,true)">
+    <input type="button" value="Collapse ALL" (click)="dt.toggleAllRowGroup($event,false)">
+    <input type="button" value="Normal Grid" (click)="normalgrid=true">
+</div>
 <div class="content-section implementation">
-    <p-dataTable [value]="cars1" sortField="brand" rowGroupMode="subheader" groupField="brand" expandableRowGroups="true"
+    <p-dataTable [value]="cars1" #dt [sortField]="(normalgrid?undefined:'brand')"  [globalFilter]="gb" [rows]="10" [paginator]="true" [rowGroupMode]="(normalgrid?undefined:'subheader')" scrollable="true"
+             scrollWidth="100%" [groupField]="(normalgrid?undefined:'brand')" [expandableRowGroups]="!normalgrid" [rowsPerPageOptions]="[5,10,20]"
             [sortableRowGroup]="false">
         <p-header>Toggleable Row Groups with Footers</p-header>
-        <ng-template pTemplate="rowgroupheader" let-rowData>{{rowData['brand']}}</ng-template>
-        <p-column field="color" header="Color"></p-column>
-        <p-column field="year" header="Year"></p-column>
-        <p-column field="vin" header="Vin"></p-column>
-        <p-column field="price" header="Price">
+        <ng-template *ngIf="!normalgrid" pTemplate="rowgroupheader" let-rowData>{{rowData['brand']}}</ng-template>
+        <p-column  [style]="{'width':'150px','visibility':'collapse'}" [hidden]="!normalgrid" field="brand" header="Brand"></p-column>
+        <p-column  [style]="{'width':'150px'}" [filter]="true" filterPlaceholder="Search" field="color" header="Color"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="year" header="Year"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="vin" header="Vin"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="color" header="Color"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="year" header="Year"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="vin" header="Vin"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="color" header="Color"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="year" header="Year"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="vin" header="Vin"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="color" header="Color"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="year" header="Year"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="vin" header="Vin"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="color" header="Color"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="year" header="Year"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="vin" header="Vin"></p-column>
+        <p-column  [style]="{'width':'150px'}" field="price" header="Price">
             <ng-template let-col let-car="rowData" pTemplate="body">
                 <span>{{car[col.field] | currency:'USD':true:'.0-0'}}</span>
             </ng-template>
@@ -26,16 +47,16 @@
             <td>{{calculateGroupTotal(car['brand']) | currency:'USD':true:'.0-0' }}</td>
         </ng-template>
     </p-dataTable>
-    
-    <p-dataTable [value]="cars2" sortField="brand" rowGroupMode="subheader" groupField="brand" [style]="{'margin-top':'50px'}">
+
+    <p-dataTable [value]="cars2" sortField="color,brand" rowGroupMode="subheader" groupField="brand" [style]="{'margin-top':'50px'}">
         <p-header>Subheader</p-header>
         <ng-template pTemplate="rowgroupheader" let-rowData>{{rowData['brand']}}</ng-template>
         <p-column field="color" header="Color" sortable="true"></p-column>
         <p-column field="year" header="Year" sortable="true"></p-column>
         <p-column field="vin" header="Vin" sortable="true"></p-column>
     </p-dataTable>
-    
-    <p-dataTable [value]="cars3" sortField="brand" rowGroupMode="rowspan" [style]="{'margin-top':'50px'}">
+
+    <p-dataTable [value]="cars3" rowGroupMode="rowspan" sortField="brand" [style]="{'margin-top':'50px'}">
         <p-header>RowSpan</p-header>
         <p-column field="brand" header="Brand" sortable="true"></p-column>
         <p-column field="color" header="Color" sortable="true"></p-column>
@@ -52,11 +73,11 @@
 export class DataTableRowGroupDemo implements OnInit &#123;
 
     cars1: Car[];
-    
+
     cars2: Car[];
-    
+
     cars3: Car[];
-    
+
     constructor(private carService: CarService) &#123;&#125;
 
     ngOnInit() &#123;
@@ -64,10 +85,10 @@ export class DataTableRowGroupDemo implements OnInit &#123;
         this.carService.getCarsMedium().then(cars => this.cars2 = cars);
         this.carService.getCarsMedium().then(cars => this.cars3 = cars);
     &#125;
-    
+
     calculateGroupTotal(brand: string) &#123;
         let total = 0;
-        
+
         if(this.cars1) &#123;
             for(let car of this.cars1) &#123;
                 if(car.brand === brand) &#123;
@@ -80,7 +101,7 @@ export class DataTableRowGroupDemo implements OnInit &#123;
     &#125;
 &#125;
 </code>
-</pre>            
+</pre>
         </p-tabPanel>
 
         <p-tabPanel header="datatablerowgroupdemo.html">

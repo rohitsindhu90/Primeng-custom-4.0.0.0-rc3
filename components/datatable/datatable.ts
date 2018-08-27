@@ -340,7 +340,6 @@ export class ScrollableView implements AfterViewInit, AfterViewChecked, OnDestro
     }
 
     initScrolling() {
-
         this.scrollHeader = <HTMLDivElement>this.scrollHeaderViewChild.nativeElement;
         this.scrollHeaderBox = <HTMLDivElement>this.scrollHeaderBoxViewChild.nativeElement;
         this.scrollBody = <HTMLDivElement>this.scrollBodyViewChild.nativeElement;
@@ -399,7 +398,6 @@ export class ScrollableView implements AfterViewInit, AfterViewChecked, OnDestro
                 this.scrollHeader.scrollLeft = 0;
             });
         }
-
         let scrollBarWidth = this.domHandler.calculateScrollbarWidth();
         if (!this.frozen) {
             this.scrollHeaderBox.style.marginRight = scrollBarWidth + 'px';
@@ -726,6 +724,8 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
     columnsSubscription: Subscription;
     resizeTimeout: any;
     datatableHeaderWidth: number;
+
+    rowGroupScrollableWidthFix: boolean;
     // public emptyMessageAlignmentTimeout:any;
     constructor(public el: ElementRef, public domHandler: DomHandler, public differs: IterableDiffers,
         public renderer: Renderer, public changeDetector: ChangeDetectorRef, public objectUtils: ObjectUtils, private ngZone: NgZone) {
@@ -798,7 +798,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
             //resize row height based on unfrozen columns
             this.initFrozenRows();
         }
-        this.emptyMessageAlignment();
+        this.scrollableBodytableAlignment();
     }
 
     ngAfterViewInit() {
@@ -941,6 +941,10 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                     this.scrollableColumns.push(col);
                 }
             });
+            //Rohit Sindhu Customization for Global Filter on scrollable grid
+            if (this.hasFilter()) {
+                this._filter();
+            }
         }
 
         this.columnsChanged = true;
@@ -1025,7 +1029,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
 
     }
 
-    emptyMessageAlignment() {
+    scrollableBodytableAlignment() {
         let unfrozenclass = "";
         let frozenWidth: number = 0;
         if (this.unfrozenWidth && this.frozenWidth && parseInt(this.frozenWidth) > 0) {
@@ -1035,8 +1039,7 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
                 frozenWidth = parseInt(this.frozenWidth) - (parseInt(this.frozenWidth) - 150)
         }
 
-        if (this.isEmpty()) {
-
+        if (this.isEmpty() || (!this.rowGroupScrollableWidthFix && this.rowGroupMode)) {
             let ele = this.el.nativeElement.querySelectorAll(unfrozenclass + ' .ui-datatable-scrollable-header-box > table');
             if (ele.length > 0) {
                 if (this.datatableHeaderWidth != ele[0].clientWidth) {
@@ -1044,20 +1047,24 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
 
                     let emptyContentWidth = this.el.nativeElement.querySelectorAll(unfrozenclass + " .ui-datatable-scrollable-body table")[0].clientWidth;
                     if (this.datatableHeaderWidth > 0 && emptyContentWidth > 0 && emptyContentWidth != this.datatableHeaderWidth) {
-                        this.setEmptyMessageWidth(unfrozenclass, (this.datatableHeaderWidth - frozenWidth));
+                        this.setScrollableBodyTableWidth(unfrozenclass, (this.datatableHeaderWidth - frozenWidth));
+                    }
+                    if ((!this.rowGroupScrollableWidthFix && this.rowGroupMode)) {
+                        this.rowGroupScrollableWidthFix = true;
                     }
                 }
             }
+
         }
-        if (!this.isEmpty() && this.datatableHeaderWidth) {
+        if (!this.isEmpty() && this.datatableHeaderWidth && !this.rowGroupScrollableWidthFix) {
             this.datatableHeaderWidth = undefined;
-            this.setEmptyMessageWidth(unfrozenclass, this.datatableHeaderWidth);
+            this.setScrollableBodyTableWidth(unfrozenclass, this.datatableHeaderWidth);
         }
 
 
     }
 
-    setEmptyMessageWidth(classname: string, width: number) {
+    setScrollableBodyTableWidth(classname: string, width: number) {
         let msgcontainer = this.el.nativeElement.querySelectorAll(classname + " .ui-datatable-scrollable-body table")[0];
         if (msgcontainer) {
             msgcontainer.style.width = width ? width + 'px' : '';
@@ -1553,34 +1560,35 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
             for (let i = 0; i < this.value.length; i++) {
                 let localMatch = true;
                 let globalMatch = false;
+                if (this.columns) {
 
-                for (let j = 0; j < this.columns.length; j++) {
-                    let col = this.columns[j],
-                        filterMeta = this.filters[col.field];
+                    for (let j = 0; j < this.columns.length; j++) {
+                        let col = this.columns[j],
+                            filterMeta = this.filters[col.field];
 
-                    //local
-                    if (filterMeta) {
-                        let filterValue = filterMeta.value,
-                            filterField = col.field,
-                            filterMatchMode = filterMeta.matchMode || 'startsWith',
-                            dataFieldValue = this.resolveFieldData(this.value[i], filterField);
-                        let filterConstraint = this.filterConstraints[filterMatchMode];
+                        //local
+                        if (filterMeta) {
+                            let filterValue = filterMeta.value,
+                                filterField = col.field,
+                                filterMatchMode = filterMeta.matchMode || 'startsWith',
+                                dataFieldValue = this.resolveFieldData(this.value[i], filterField);
+                            let filterConstraint = this.filterConstraints[filterMatchMode];
 
-                        if (!filterConstraint(dataFieldValue, filterValue.toString())) {
-                            localMatch = false;
+                            if (!filterConstraint(dataFieldValue, filterValue.toString())) {
+                                localMatch = false;
+                            }
+
+                            if (!localMatch) {
+                                break;
+                            }
                         }
 
-                        if (!localMatch) {
-                            break;
+                        //global
+                        if (this.globalFilter && !globalMatch) {
+                            globalMatch = this.filterConstraints['contains'](this.resolveFieldData(this.value[i], col.field), this.globalFilter.value);
                         }
-                    }
-
-                    //global
-                    if (this.globalFilter && !globalMatch) {
-                        globalMatch = this.filterConstraints['contains'](this.resolveFieldData(this.value[i], col.field), this.globalFilter.value);
                     }
                 }
-
                 let matches = localMatch;
                 if (this.globalFilter) {
                     matches = localMatch && globalMatch;
@@ -2133,24 +2141,38 @@ export class DataTable implements AfterViewChecked, AfterViewInit, AfterContentI
         return this.findExpandedRowGroupIndex(row) != -1;
     }
 
+    toggleAllRowGroup(event: Event, expand: boolean): void {
+        if (this.rowGroupMetadata) {
+            let groups = Object.keys(this.rowGroupMetadata);
+            this.expandedRowsGroups = [];
+            if (expand) {
+                groups.forEach(row => {
+                    this.expandedRowsGroups.push(row);
+                });
+            }
+        }
+    }
+
     toggleRowGroup(event: Event, row: any): void {
+        
         this.rowGroupToggleClick = true;
         let index = this.findExpandedRowGroupIndex(row);
         let rowGroupField = this.resolveFieldData(row, this.groupField);
         if (index >= 0) {
             this.expandedRowsGroups.splice(index, 1);
-            this.onRowGroupCollapse.emit({
-                originalEvent: event,
-                group: rowGroupField
-            });
+
+             //this.onRowGroupCollapse.emit({
+             //    originalEvent: event,
+             //    group: rowGroupField
+             //});
         }
         else {
             this.expandedRowsGroups = this.expandedRowsGroups || [],
                 this.expandedRowsGroups.push(rowGroupField);
-            this.onRowGroupExpand.emit({
-                originalEvent: event,
-                group: rowGroupField
-            });
+            // this.onRowGroupExpand.emit({
+            //     originalEvent: event,
+            //     group: rowGroupField
+            // });
         }
         event.preventDefault();
     }

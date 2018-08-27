@@ -11,11 +11,11 @@
 </div>
 
 <div class="content-section implementation">
-    <!-- <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+    <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
         <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
         <input #gb type="text" pInputText size="50" placeholder="Global Filter">
-    </div> -->
-    <p-dataTable [value]="cars" [rows]="10" sscrollable="true"  scrollHeight="200px" scrollWidth="600px" [style]="{'margin-top':'30px'}" [paginator]="true" #dt>
+    </div>
+    <p-dataTable [value]="cars" [filters]="filters" [rows]="10" sscrollable="true" [globalFilter]="gb"  scrollHeight="200px" scrollWidth="600px" [style]="{'margin-top':'30px'}" [paginator]="true" #dt>
         <!-- <p-header>List of Cars</p-header> -->
         <!-- <p-header>
             <div class="ui-helper-clearfix">
@@ -31,7 +31,8 @@
         </p-column>
         <p-column [style]="{'width':'250px'}" field="brand" header="Brand (Custom)" [filter]="true" [style]="{'overflow':'visible'}" filterMatchMode="equals">
             <ng-template pTemplate="filter" let-col>
-                <p-dropdown [options]="brands" appendTo="body" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                <i class="fa fa-close" (click)="brandfilter=null;dt.filter(null,col.field,col.filterMatchMode)"></i>
+                <p-dropdown [options]="brands" appendTo="body" [(ngModel)]="brandfilter" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
             </ng-template>
         </p-column>
         <p-column [style]="{'width':'250px'}" field="color" header="Color (Custom)" [filter]="true" filterMatchMode="in" [style]="{'overflow':'visible'}">

@@ -15,8 +15,10 @@ export class DataTableFilterDemo implements OnInit {
     colors: SelectItem[];
 
     constructor(private carService: CarService) {}
+     filters: { [s: string]: any; } = {};
 
     ngOnInit() {
+      this.filters["brand"]={ value: "HCL", matchMode: "equals"}
       let count:number=4;
         this.carService.getCarsMedium().then(cars =>{
           this.cars = cars;
@@ -40,7 +42,6 @@ export class DataTableFilterDemo implements OnInit {
         this.brands.push({label: 'Renault', value: 'Renault'});
         this.brands.push({label: 'VW', value: 'VW'});
         this.brands.push({label: 'Volvo', value: 'Volvo'});
-
         this.colors = [];
         this.colors.push({label: 'White', value: 'White'});
         this.colors.push({label: 'Green', value: 'Green'});
